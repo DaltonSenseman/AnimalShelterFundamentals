@@ -13,6 +13,8 @@
 ### Contributing
 
 ### Author
+- Front end Devloper's:
+- Back end Developer's:
 
 ### License
 
