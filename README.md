@@ -13,7 +13,9 @@
 ### Contributing
 
 ### Author
-- Front end Devloper's:
+- Team Leader:
+- Analyst and Documentation:
+- Front end Developer's:
 - Back end Developer's:
 
 ### License
