@@ -12,7 +12,7 @@
 
 ### Contributing
 
-### Author
+### Team
 - Team Leader:
 - Analyst and Documentation:
 - Front end Developer's:
