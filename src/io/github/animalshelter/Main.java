@@ -19,9 +19,9 @@ public class Main extends Application {
     // establish connection to database.
     initializeDB();
 
-    Parent root = FXMLLoader.load(getClass().getResource("animalshelter.fxml"));
+    Parent root = FXMLLoader.load(getClass().getResource("animalshelterLogin.fxml"));
     primaryStage.setTitle("Animal Shelter");
-    primaryStage.setScene(new Scene(root, 300, 275));
+    primaryStage.setScene(new Scene(root, 650, 450));
     primaryStage.show();
   }
 
