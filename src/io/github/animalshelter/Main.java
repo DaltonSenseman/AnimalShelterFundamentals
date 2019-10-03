@@ -21,7 +21,7 @@ public class Main extends Application {
 
     Parent root = FXMLLoader.load(getClass().getResource("animalshelterLogin.fxml"));
     primaryStage.setTitle("Animal Shelter");
-    primaryStage.setScene(new Scene(root, 650, 450));
+    primaryStage.setScene(new Scene(root, 426, 400));
     primaryStage.show();
   }
 
