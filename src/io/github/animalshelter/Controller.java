@@ -1,5 +1,10 @@
 package io.github.animalshelter;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +17,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class Controller {
+
+  Connection conn = null;
+  Statement stmt = null;
 
   @FXML
   private Button loginSubmitButton, logOutButton, addAnimalBtn;
@@ -26,6 +34,21 @@ public class Controller {
   private Label loginFailedLabel;
   @FXML private TextField animalName;
   @FXML private TextField species;
+
+  public void initialize() {
+    final String JDBC_DRIVER = "org.h2.Driver";
+    final String DB_URL = "jdbc:h2:./res/data";
+    final String USER = "";
+    final String PASS = "";
+
+    try {
+      Class.forName(JDBC_DRIVER);
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+      stmt = conn.createStatement();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
 
 
   /**
@@ -83,21 +106,25 @@ public class Controller {
      * @throws Exception
      */
     @FXML
-    private void addAnimal(ActionEvent event) throws Exception {
+    private void addAnimal(ActionEvent event) {
 
-      // Will add to the database (not functional yet)
-      // Obtains the input from the text fields
-      String newAnimalName = animalName.getText();
-      String newSpecies = species.getText();
-      String sqlAdd =
-          "INSERT INTO Animal(name, species) VALUES ("
-              + " ' "
-              + newAnimalName
-              + " ' "
-              + ','
-              + "'"
-              + newSpecies
-              + "'"
-              + ");";
+      try {
+        // Obtains the input from the text fields
+        String newAnimalName = animalName.getText();
+        String newSpecies = species.getText();
+        String preparedStm = "INSERT INTO ANIMAL( NAME, SPECIES) VALUES ( ?, ? );";
+        PreparedStatement preparedStatement = conn.prepareStatement(preparedStm);
+        preparedStatement.setString(1, newAnimalName);
+        preparedStatement.setString(2, newSpecies);
+        preparedStatement.executeUpdate();
+
+        stmt.close();
+        conn.close();
+
+      }
+      catch (SQLException e){
+        e.printStackTrace();
+
+      }
     }
 }
