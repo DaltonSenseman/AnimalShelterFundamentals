@@ -3,8 +3,13 @@ package io.github.animalshelter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +18,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 public class Controller {
@@ -34,6 +42,7 @@ public class Controller {
   private Label loginFailedLabel;
   @FXML private TextField animalName;
   @FXML private TextField species;
+  @FXML private TableView currentAnimals=  new TableView();
 
   public void initialize() {
     final String JDBC_DRIVER = "org.h2.Driver";
@@ -48,8 +57,21 @@ public class Controller {
     } catch (Exception ex) {
       ex.printStackTrace();
     }
-  }
 
+    TableColumn<Animal, String> idNumber = new TableColumn<>("Collar ID");
+    idNumber.setCellValueFactory(new PropertyValueFactory<>("Collar_ID"));
+    TableColumn<Animal, String> currentName = new TableColumn<>("Name");
+    currentName.setCellValueFactory(new PropertyValueFactory<>("name"));
+    TableColumn<Animal, String> currentType = new TableColumn<>("Species");
+    currentType.setCellValueFactory(new PropertyValueFactory<>("species"));
+
+    currentAnimals.getColumns().add(idNumber);
+    currentAnimals.getColumns().add(currentName);
+    currentAnimals.getColumns().add(currentType);
+
+    populateTable();
+
+  }
 
   /**
    * When the login scene submit button is clicked. Checks username and password fields to see if db
@@ -118,6 +140,10 @@ public class Controller {
         preparedStatement.setString(2, newSpecies);
         preparedStatement.executeUpdate();
 
+
+
+        populateTable();
+
         stmt.close();
         conn.close();
 
@@ -127,4 +153,31 @@ public class Controller {
 
       }
     }
+
+
+  public void populateTable() {
+    String sql = "SELECT * FROM ANIMAL;";
+    ResultSet rs = null;
+    try {
+      rs = stmt.executeQuery(sql);
+
+      ResultSetMetaData rsmd = rs.getMetaData();
+      int numberOfColumns = rsmd.getColumnCount();
+
+      ArrayList<Animal> arrOfAnimals = new ArrayList();
+      // These loops are used to out put the table of data to the console
+      while (rs.next()) {
+        String id = rs.getString("COLLAR_ID");
+        String name = rs.getString("Name");
+        String animalSpecies = rs.getString("Species");
+        Animal tableOfAnimals = new Animal(id, name, animalSpecies);
+        arrOfAnimals.add(tableOfAnimals);
+      }
+
+      ObservableList pets = FXCollections.observableList(arrOfAnimals);
+      currentAnimals.setItems(pets);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
 }

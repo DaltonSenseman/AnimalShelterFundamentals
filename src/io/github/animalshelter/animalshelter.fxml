@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -41,7 +42,10 @@
       </AnchorPane>
     </Tab>
     <Tab text="Adopt">
-      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+            <children>
+               <TableView fx:id="currentAnimals" layoutX="221.0" layoutY="108.0" prefHeight="200.0" prefWidth="271.0" />
+            </children></AnchorPane>
     </Tab>
   </TabPane>
 </GridPane>
