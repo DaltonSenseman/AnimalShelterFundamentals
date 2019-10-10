@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="426.0" stylesheets="@../../../Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.animalshelter.Controller">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="426.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.animalshelter.Controller">
   <Button fx:id="loginSubmitButton" layoutX="281.0" layoutY="267.0" mnemonicParsing="false" onAction="#onSubmitButtonClicked" prefHeight="32.0" prefWidth="73.0" text="Submit" />
 
   <Label id="welcome" layoutX="140.0" layoutY="34.0" text="Welcome">

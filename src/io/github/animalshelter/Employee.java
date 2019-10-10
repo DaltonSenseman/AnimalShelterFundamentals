@@ -1,3 +1,5 @@
+package io.github.animalshelter;
+
 public class Employee {
 
     private int employeeNum;
