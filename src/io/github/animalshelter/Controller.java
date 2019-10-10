@@ -133,7 +133,7 @@ public class Controller {
   @FXML
   private void addAnimal(ActionEvent event) {
 
-    try {
+    try{
       // Obtains the input from the text fields
       String newAnimalName = animalName.getText();
       String newSpecies = species.getText();

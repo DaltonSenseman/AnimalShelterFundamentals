@@ -6,18 +6,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 public class Main extends Application {
 
   @Override
   public void start(Stage primaryStage) throws Exception {
 
-    Parent root = FXMLLoader.load(getClass().getResource("animalshelterLogin.fxml"));
+    Parent root = FXMLLoader.load(getClass().getResource("animalShelterLogin.fxml"));
     primaryStage.setTitle("Animal Shelter");
     primaryStage.setScene(new Scene(root, 426, 400));
     primaryStage.show();
