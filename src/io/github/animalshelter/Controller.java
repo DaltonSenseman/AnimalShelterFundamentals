@@ -40,9 +40,12 @@ public class Controller {
 
   @FXML
   private Label loginFailedLabel;
-  @FXML private TextField animalName;
-  @FXML private TextField species;
-  @FXML private TableView currentAnimals=  new TableView();
+  @FXML
+  private TextField animalName;
+  @FXML
+  private TextField species;
+  @FXML
+  private TableView currentAnimals = new TableView();
 
   public void initialize() {
     final String JDBC_DRIVER = "org.h2.Driver";
@@ -121,38 +124,35 @@ public class Controller {
     this.onSubmitButtonClicked(event);
   }
 
-    /**
-     * When the enter button is pressed. Calls onSubmitButtonClicked module.
-     *
-     * @param event
-     * @throws Exception
-     */
-    @FXML
-    private void addAnimal(ActionEvent event) {
+  /**
+   * When the enter button is pressed. Calls onSubmitButtonClicked module.
+   *
+   * @param event
+   * @throws Exception
+   */
+  @FXML
+  private void addAnimal(ActionEvent event) {
 
-      try {
-        // Obtains the input from the text fields
-        String newAnimalName = animalName.getText();
-        String newSpecies = species.getText();
-        String preparedStm = "INSERT INTO ANIMAL( NAME, SPECIES) VALUES ( ?, ? );";
-        PreparedStatement preparedStatement = conn.prepareStatement(preparedStm);
-        preparedStatement.setString(1, newAnimalName);
-        preparedStatement.setString(2, newSpecies);
-        preparedStatement.executeUpdate();
+    try {
+      // Obtains the input from the text fields
+      String newAnimalName = animalName.getText();
+      String newSpecies = species.getText();
+      String preparedStm = "INSERT INTO ANIMAL( NAME, SPECIES) VALUES ( ?, ? );";
+      PreparedStatement preparedStatement = conn.prepareStatement(preparedStm);
+      preparedStatement.setString(1, newAnimalName);
+      preparedStatement.setString(2, newSpecies);
+      preparedStatement.executeUpdate();
 
+      populateTable();
 
+      stmt.close();
+      conn.close();
 
-        populateTable();
+    } catch (SQLException e) {
+      e.printStackTrace();
 
-        stmt.close();
-        conn.close();
-
-      }
-      catch (SQLException e){
-        e.printStackTrace();
-
-      }
     }
+  }
 
 
   public void populateTable() {
