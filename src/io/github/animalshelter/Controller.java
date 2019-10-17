@@ -16,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
@@ -30,7 +31,7 @@ public class Controller {
   Statement stmt = null;
 
   @FXML
-  private Button loginSubmitButton, logOutButton, addAnimalBtn;
+  private Button loginSubmitButton, logOutButton, addAnimalBtn, animalIDSearchButton;
 
   @FXML
   private TextField loginUserField;
@@ -46,12 +47,24 @@ public class Controller {
   private TextField species;
   @FXML
   private TableView currentAnimals = new TableView();
+  // Search Function Declarations
+  @FXML
+  private ComboBox<String> animalEmployeeCmbBx = new ComboBox<>();
+  @FXML
+  private ComboBox<String> searchCatgryCmbBx = new ComboBox<>();
+  @FXML
+  private TextField searchField;
 
   public void initialize() {
     final String JDBC_DRIVER = "org.h2.Driver";
     final String DB_URL = "jdbc:h2:./res/data";
     final String USER = "";
     final String PASS = "";
+    // Sets choices in search dropdown
+    animalEmployeeCmbBx.getItems().addAll("Animal", "Employee");
+    searchCatgryCmbBx.getItems()
+        .addAll("Collar ID", "Animal Name", "Species", "Employee Num", "Emp First Name",
+            "Emp Last Name", "Job Class");
 
     try {
       Class.forName(JDBC_DRIVER);
@@ -145,8 +158,8 @@ public class Controller {
 
       populateTable();
 
-      stmt.close();
-      conn.close();
+      //stmt.close();
+      //conn.close();
 
     } catch (SQLException e) {
       e.printStackTrace();
@@ -176,6 +189,94 @@ public class Controller {
 
       ObservableList pets = FXCollections.observableList(arrOfAnimals);
       currentAnimals.setItems(pets);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @FXML
+  private void search(ActionEvent event) {
+    try {
+      System.out.println("Search has been pressed");
+      String preparedStm = "";
+      String searchFieldValue;
+      PreparedStatement preparedStatement;
+      ResultSet resultSet;
+      // If "Animal" chosen in first dropdown (combobox)
+      if (animalEmployeeCmbBx.getValue().equals("Animal")) {
+        // Depending on what they selected for "Search By" combobox, will change SELECT statement
+        if (searchCatgryCmbBx.getValue().equals("Collar ID")) {
+          // Select statement chooses animals that have the search term anywhere in their ID, Name,
+          // or Species
+          // Example: Search For: Animal, Search By: Collar ID, searchFieldValue = 1
+          // returns all animals with "1" in their collard ID. This will later be changed so you can
+          // choose to be specific or not
+          preparedStm = "SELECT * FROM ANIMAL WHERE COLLAR_ID LIKE ?;";
+        } else if (searchCatgryCmbBx.getValue().equals("Animal Name")) {
+          preparedStm = "SELECT * FROM ANIMAL WHERE NAME LIKE ?";
+        } else if (searchCatgryCmbBx.getValue().equals("Species")) {
+          preparedStm = "SELECT * FROM ANIMAL WHERE SPECIES LIKE ?";
+        }
+        // If chooses "Animal" and an employee specific "Search By", it will send an error and not
+        // execute the SQL, instead allowing user to reenter their search
+        else {
+          System.out.println("Cannot search for animals using employee search terms");
+          return;
+        }
+      }
+      // If "Employee" chosen in first combobox
+      else {
+        // look at if statement [if(animalEmployeeCmbBx...equals("Animal")] above for explanation
+        // because the functions are basically the same, except this is for employees
+        if (searchCatgryCmbBx.getValue().equals("Employee Num")) {
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE EMPLOYEE_NUM LIKE ?";
+        } else if (searchCatgryCmbBx.getValue().equals("Emp First Name")) {
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE FIRST_NAME LIKE ?";
+        } else if (searchCatgryCmbBx.getValue().equals("Emp Last Name")) {
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE LAST_NAME LIKE ?";
+        } else if (searchCatgryCmbBx.getValue().equals("Job Class")) {
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE JOB_CLASS LIKE ?";
+        } else {
+          System.out.println("Cannot search for employees using animal search terms");
+          return;
+        }
+      }
+      searchFieldValue = searchField.getText();
+      System.out.println(searchFieldValue);
+      preparedStatement = conn.prepareStatement(preparedStm);
+      preparedStatement.setString(1, "%" + searchFieldValue + "%");
+      resultSet = preparedStatement.executeQuery();
+
+      if (animalEmployeeCmbBx.getValue().equals("Animal")) {
+        // Prints list of results of animal search
+        while (resultSet.next()) {
+          int collarID = resultSet.getInt("COLLAR_ID");
+          String animalName = resultSet.getString("NAME");
+          String species = resultSet.getString("SPECIES");
+
+          System.out.println("----------");
+          System.out.println("Collar ID: " + collarID);
+          System.out.println("Animal Name: " + animalName);
+          System.out.println("Species: " + species + "\n");
+        }
+      } else {
+        // Prints list of results of employee search
+        while (resultSet.next()) {
+          int empNum = resultSet.getInt("EMPLOYEE_NUM");
+          String empFirstName = resultSet.getString("FIRST_NAME");
+          String empLastName = resultSet.getString("LAST_NAME");
+          String jobClass = resultSet.getString("JOB_CLASS");
+
+          System.out.println("----------");
+          System.out.println("Employee Number: " + empNum);
+          System.out.println("Employee First Name: " + empFirstName);
+          System.out.println("Employee Last Name: " + empLastName);
+          System.out.println("Job Class: " + jobClass + "\n");
+        }
+      }
+
+//      stmt.close();
+//      conn.close();
     } catch (SQLException e) {
       e.printStackTrace();
     }

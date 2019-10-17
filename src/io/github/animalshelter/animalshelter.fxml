@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<?import javafx.scene.control.ComboBox?>
 <GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.171"
   xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.animalshelter.Controller" stylesheets="@Styles.css">
   <columnConstraints>
@@ -50,6 +51,19 @@
           <TableView fx:id="currentAnimals" layoutX="221.0" layoutY="108.0" prefHeight="200.0"
             prefWidth="271.0"/>
         </children>
+      </AnchorPane>
+    </Tab>
+    <Tab text="Search">
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+        <GridPane layoutX="187.0" layoutY="51.0" prefHeight="123.0" prefWidth="250.0">
+          <children>
+            <Button fx:id="animalIDSearchButton" GridPane.columnIndex="0" GridPane.rowIndex="1"
+              mnemonicParsing="false" onAction="#search" text="Search"/>
+            <TextField fx:id="searchField" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+            <ComboBox fx:id="animalEmployeeCmbBx" GridPane.columnIndex="0" GridPane.rowIndex="2" promptText="Search for:"/>
+            <ComboBox fx:id="searchCatgryCmbBx" GridPane.columnIndex="0" GridPane.rowIndex="4"  promptText="Search by:"/>
+          </children>
+        </GridPane>
       </AnchorPane>
     </Tab>
   </TabPane>
