@@ -47,7 +47,7 @@ Contributor:Jean Paul
 Description: added CSS file and implemented it to the GUI
 
 Version: 1.4 
-Date: 10/10 
+Date: 10/17 
 Contributor:Tomas 
 Description: added database search functionality
 
