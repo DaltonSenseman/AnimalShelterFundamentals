@@ -1,5 +1,14 @@
 package io.github.animalshelter;
 
+/**
+ * The class allows the creation of animal objects
+ *
+ * @author Dalton Senseman
+ * @author Jeff Munoz
+ * @author Jean Paul Mathew
+ * @author Tomas Vergara
+ * @author William Ramanand
+ */
 public class Animal {
 
   private String name;

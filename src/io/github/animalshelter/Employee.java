@@ -1,5 +1,14 @@
 package io.github.animalshelter;
 
+/**
+ * This class allows the creation of Employee objects.
+ *
+ * @author Dalton Senseman
+ * @author Jeff Munoz
+ * @author Jean Paul Mathew
+ * @author Tomas Vergara
+ * @author William Ramanand
+ */
 public class Employee {
 
     private int employeeNum;

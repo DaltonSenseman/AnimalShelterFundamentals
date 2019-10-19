@@ -6,6 +6,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * This the the main class of the the Animal Shelter application
+ *
+ * @author Dalton Senseman
+ * @author Jeff Munoz
+ * @author Jean Paul Mathew
+ * @author Tomas Vergara
+ * @author William Ramanand
+ */
 public class Main extends Application {
 
   @Override

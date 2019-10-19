@@ -16,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -25,13 +26,31 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+/**
+ * This the the main controller class where all major functionality is stored.
+ *
+ * @author Dalton Senseman
+ * @author Jeff Munoz
+ * @author Jean Paul Mathew
+ * @author Tomas Vergara
+ * @author William Ramanand
+ */
 public class Controller {
 
   Connection conn = null;
   Statement stmt = null;
 
   @FXML
-  private Button loginSubmitButton, logOutButton, addAnimalBtn, animalIDSearchButton;
+  private Button loginSubmitButton;
+
+  @FXML
+  private Button logOutButton;
+
+  @FXML
+  private Button addAnimalBtn;
+
+  @FXML
+  private Button animalIDSearchButton;
 
   @FXML
   private TextField loginUserField;
@@ -41,19 +60,28 @@ public class Controller {
 
   @FXML
   private Label loginFailedLabel;
+
   @FXML
   private TextField animalName;
+
   @FXML
   private TextField species;
+
   @FXML
   private TableView currentAnimals = new TableView();
+
   // Search Function Declarations
   @FXML
   private ComboBox<String> animalEmployeeCmbBx = new ComboBox<>();
+
   @FXML
   private ComboBox<String> searchCatgryCmbBx = new ComboBox<>();
+
   @FXML
   private TextField searchField;
+
+  @FXML
+  private TableView<AnimalEvent> eventsTable = new TableView();
 
   public void initialize() {
     final String JDBC_DRIVER = "org.h2.Driver";
@@ -87,6 +115,17 @@ public class Controller {
 
     populateTable();
 
+
+    TableColumn<AnimalEvent, String> eventType = new TableColumn<>("Type");
+    eventType.setCellValueFactory(new PropertyValueFactory<>("eventType"));
+    TableColumn<AnimalEvent, String> eventAnimalID = new TableColumn<>("Animal ID");
+    eventAnimalID.setCellValueFactory(new PropertyValueFactory<>("animalID"));
+    TableColumn<AnimalEvent, String> eventDate = new TableColumn<>("Date");
+    eventDate.setCellValueFactory(new PropertyValueFactory<>("eventDate"));
+
+    eventsTable.getColumns().addAll(eventType, eventAnimalID, eventDate);
+
+    populateEventsTable();
   }
 
   /**
@@ -280,5 +319,17 @@ public class Controller {
     } catch (SQLException e) {
       e.printStackTrace();
     }
+  }
+
+  public void populateEventsTable() {
+
+    // Hard coded populate for eventsTable
+    ArrayList<AnimalEvent> arrOfEvents = new ArrayList();
+    arrOfEvents.add(new AnimalEvent("Cleaning", "0001", "09/12/2020"));
+    arrOfEvents.add(new AnimalEvent("Vet Checkup", "0002", "12/21/2012"));
+
+
+    ObservableList events = FXCollections.observableList(arrOfEvents);
+    eventsTable.setItems(events);
   }
 }
