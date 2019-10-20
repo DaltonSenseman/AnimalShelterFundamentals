@@ -1,17 +1,15 @@
 .root {
-  -fx-background-color: #2196F3;
+  -fx-background-color: #71C175;
 }
 
 .label {
-  -fx-background-color: #BBDEFB;
-  -fx-font-size: 13;
+  -fx-background-color: #008799;
+  -fx-font-size: 12;
   -fx-font-family: Arial;
-  -fx-text-fill: #212121;
-  -fx-border-radius: 3;
-  -fx-border-width: 3;
-  -fx-border-color: #FFFFFF;
-  -fx-underline: false;
+  -fx-text-fill: #FFFFFF;
 
+    -fx-border-color: #008799;
+  -fx-underline: false;
 }
 
 .button {
@@ -27,7 +25,7 @@
 
 .text-field {
   -fx-background-color: #FFFFFF;
-  -fx-border-color: #FFC107;
+  -fx-border-color: #212121;
   -fx-border-width: 2;
   -fx-border-radius: 2;
 }
@@ -39,3 +37,11 @@
   -fx-text-fill: #FFFFFF;
   -fx-underline: true;
 }
+
+#loginFailedLabel{
+    -fx-background-color:  #008799;
+    -fx-font-size: 15;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-width: 0;
+}
+
