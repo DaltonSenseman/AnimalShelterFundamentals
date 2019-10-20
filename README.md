@@ -1,17 +1,21 @@
 # AnimalShelterFundamentals
 
+ The  software will have two possible accounts, an employee account and an administrator account. The employee account will be able to add/remove animals from the shelter’s database. Each animal added to the database will have a profile that holds their animal type, breed, vaccines and check-ups, name, and age. An employee will be able to modify the information contained in these profiles. A specific animal in the database can be found by searching their animal ID. The program will allow the employees to see where animals are located in the facility and place them in certain holding areas and cages. The user will also be allowed to order supplies for specific animals and schedule vet visits and cleanings. An administrator account will inherit all of the employee accounts rights plus the ability to add employees, schedule tasks, and change employee information and permissions in the program. 
+
 ### Demonstration
 
 ### Documentation
 
 ### Diagrams
 
+![UML](https://user-images.githubusercontent.com/43663619/67156074-14fd7480-f2e8-11e9-913a-39d9984ad443.PNG)
+
 ### Getting Started
 
 ### Built With
-Created with JavaFx version 1.8 and H2 as a database.
-CSS 3 is used for style effects.
-Using the IntelliJ Idea 2019.2 as the IDE.
+- Created with JavaFx version 1.8 and H2 as a database.
+- CSS 3 is used for style effects.
+- Using the IntelliJ Idea 2019.2 as the IDE.
 
 ### Contributing
 
@@ -24,6 +28,10 @@ Using the IntelliJ Idea 2019.2 as the IDE.
 ### License
 
 ### Acknowledgments
+
+### Requirements
+- Windows 7 or higher
+- Java 1.8 or higher
 
 ### History
 Version: 1.0 
