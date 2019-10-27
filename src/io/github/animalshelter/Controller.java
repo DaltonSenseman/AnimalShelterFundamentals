@@ -48,6 +48,7 @@ public class Controller {
 
   @FXML
   private Button addAnimalBtn;
+  @FXML private Button deleteAnimal;
 
   @FXML
   private Button animalIDSearchButton;
@@ -83,27 +84,20 @@ public class Controller {
   @FXML
   private TableView<AnimalEvent> eventsTable = new TableView();
 
+  ArrayList<Animal> arrOfAnimals = new ArrayList();
+  ObservableList<Animal> pets;
+
+
   public void initialize() {
-    final String JDBC_DRIVER = "org.h2.Driver";
-    final String DB_URL = "jdbc:h2:./res/data";
-    final String USER = "";
-    final String PASS = "";
     // Sets choices in search dropdown
     animalEmployeeCmbBx.getItems().addAll("Animal", "Employee");
     searchCatgryCmbBx.getItems()
         .addAll("Collar ID", "Animal Name", "Species", "Employee Num", "Emp First Name",
             "Emp Last Name", "Job Class");
 
-    try {
-      Class.forName(JDBC_DRIVER);
-      conn = DriverManager.getConnection(DB_URL, USER, PASS);
-      stmt = conn.createStatement();
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
 
-    TableColumn<Animal, String> idNumber = new TableColumn<>("Collar ID");
-    idNumber.setCellValueFactory(new PropertyValueFactory<>("Collar_ID"));
+    TableColumn<Animal, Integer> idNumber = new TableColumn<>("Collar ID");
+    idNumber.setCellValueFactory(new PropertyValueFactory<>("collarID"));
     TableColumn<Animal, String> currentName = new TableColumn<>("Name");
     currentName.setCellValueFactory(new PropertyValueFactory<>("name"));
     TableColumn<Animal, String> currentType = new TableColumn<>("Species");
@@ -184,8 +178,8 @@ public class Controller {
    */
   @FXML
   private void addAnimal(ActionEvent event) {
-
-    try{
+    initializeDB();
+    try {
       // Obtains the input from the text fields
       String newAnimalName = animalName.getText();
       String newSpecies = species.getText();
@@ -197,44 +191,59 @@ public class Controller {
 
       populateTable();
 
-      //stmt.close();
-      //conn.close();
-
     } catch (SQLException e) {
       e.printStackTrace();
 
     }
+    closeDb();
+  }
+  public void deleteAnimal(){
+    initializeDB();
+    try {
+      Animal animalToBeDeleted = (Animal) currentAnimals.getSelectionModel().getSelectedItem();
+      int delete = animalToBeDeleted.getCollarID();
+      String preparedStm = "DELETE FROM ANIMAL WHERE COLLAR_ID = ?;";
+      PreparedStatement preparedStatement = null;
+      preparedStatement = conn.prepareStatement(preparedStm);
+      preparedStatement.setInt(1, delete);
+      preparedStatement.executeUpdate();
+
+      ObservableList<Animal> allAnimals = currentAnimals.getItems();
+      ObservableList<Animal> selectedAnimals = currentAnimals.getSelectionModel().getSelectedItems();
+      selectedAnimals.forEach(allAnimals::remove);
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    closeDb();
   }
 
-
   public void populateTable() {
+    initializeDB();
     String sql = "SELECT * FROM ANIMAL;";
     ResultSet rs = null;
+
     try {
       rs = stmt.executeQuery(sql);
-
-      ResultSetMetaData rsmd = rs.getMetaData();
-      int numberOfColumns = rsmd.getColumnCount();
-
-      ArrayList<Animal> arrOfAnimals = new ArrayList();
-      // These loops are used to out put the table of data to the console
       while (rs.next()) {
-        String id = rs.getString("COLLAR_ID");
         String name = rs.getString("Name");
         String animalSpecies = rs.getString("Species");
-        Animal tableOfAnimals = new Animal(id, name, animalSpecies);
+        int animalCollarId = rs.getInt("Collar_ID");
+        Animal tableOfAnimals = new Animal(name, animalSpecies,animalCollarId);
         arrOfAnimals.add(tableOfAnimals);
       }
-
-      ObservableList pets = FXCollections.observableList(arrOfAnimals);
+      pets = FXCollections.observableList(arrOfAnimals);
       currentAnimals.setItems(pets);
     } catch (SQLException e) {
       e.printStackTrace();
     }
+    closeDb();
   }
 
   @FXML
   private void search(ActionEvent event) {
+    initializeDB();
     try {
       System.out.println("Search has been pressed");
       String preparedStm = "";
@@ -314,14 +323,14 @@ public class Controller {
         }
       }
 
-//      stmt.close();
-//      conn.close();
     } catch (SQLException e) {
       e.printStackTrace();
     }
+    closeDb();
   }
 
   public void populateEventsTable() {
+    initializeDB();
 
     // Hard coded populate for eventsTable
     ArrayList<AnimalEvent> arrOfEvents = new ArrayList();
@@ -331,5 +340,37 @@ public class Controller {
 
     ObservableList events = FXCollections.observableList(arrOfEvents);
     eventsTable.setItems(events);
+    closeDb();
+  }
+
+  public void initializeDB() {
+    // Connection to the database
+    // JDBC driver name and database URL
+    final String Jdbc_Driver = "org.h2.Driver";
+    final String Db_Url = "jdbc:h2:./res/data";
+    final String user = "";
+    final String pass = "";
+
+    try {
+      Class.forName(Jdbc_Driver);
+      // uses an empty password for now but it will be addressed at a later time
+      conn = DriverManager.getConnection(Db_Url, user, pass);
+
+      stmt = conn.createStatement();
+    } catch (ClassNotFoundException e) {
+      // e.printStackTrace();
+      System.out.println("Unable to find class");
+    } catch (SQLException e) {
+      e.printStackTrace();
+      System.out.println("Error in SQL please try again");
+    }
+  }
+  public void closeDb(){
+    try {
+      stmt.close();
+      conn.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
   }
 }
