@@ -84,11 +84,12 @@ public class Controller {
   @FXML
   private TableView<AnimalEvent> eventsTable = new TableView();
 
-  ArrayList<Animal> arrOfAnimals = new ArrayList();
+  final ArrayList<Animal> arrOfAnimals = new ArrayList();
   ObservableList<Animal> pets;
 
 
   public void initialize() {
+    pets = FXCollections.observableList(arrOfAnimals);
     // Sets choices in search dropdown
     animalEmployeeCmbBx.getItems().addAll("Animal", "Employee");
     searchCatgryCmbBx.getItems()
@@ -108,7 +109,6 @@ public class Controller {
     currentAnimals.getColumns().add(currentType);
 
     populateTable();
-
 
     TableColumn<AnimalEvent, String> eventType = new TableColumn<>("Type");
     eventType.setCellValueFactory(new PropertyValueFactory<>("eventType"));
@@ -222,9 +222,10 @@ public class Controller {
   public void populateTable() {
     initializeDB();
     String sql = "SELECT * FROM ANIMAL;";
-    ResultSet rs = null;
-
+    ResultSet rs;
     try {
+      arrOfAnimals.clear();
+      pets.clear();
       rs = stmt.executeQuery(sql);
       while (rs.next()) {
         String name = rs.getString("Name");
