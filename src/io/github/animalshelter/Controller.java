@@ -24,6 +24,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.beans.value.ObservableValue;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.util.Callback;
 import javafx.stage.Stage;
 
 /**
@@ -48,7 +52,8 @@ public class Controller {
 
   @FXML
   private Button addAnimalBtn;
-  @FXML private Button deleteAnimal;
+  @FXML
+  private Button deleteAnimal;
 
   @FXML
   private Button animalIDSearchButton;
@@ -82,7 +87,11 @@ public class Controller {
   private TextField searchField;
 
   @FXML
+  private TableView searchResultTable = new TableView();
+
+  @FXML
   private TableView<AnimalEvent> eventsTable = new TableView();
+
 
   final ArrayList<Animal> arrOfAnimals = new ArrayList();
   ObservableList<Animal> pets;
@@ -95,7 +104,6 @@ public class Controller {
     searchCatgryCmbBx.getItems()
         .addAll("Collar ID", "Animal Name", "Species", "Employee Num", "Emp First Name",
             "Emp Last Name", "Job Class");
-
 
     TableColumn<Animal, Integer> idNumber = new TableColumn<>("Collar ID");
     idNumber.setCellValueFactory(new PropertyValueFactory<>("collarID"));
@@ -125,9 +133,6 @@ public class Controller {
   /**
    * When the login scene submit button is clicked. Checks username and password fields to see if db
    * match.
-   *
-   * @param event
-   * @throws Exception
    */
   @FXML
   private void onSubmitButtonClicked(ActionEvent event) throws Exception {
@@ -146,9 +151,6 @@ public class Controller {
 
   /**
    * When the main scene logout button is clicked. Loads login scene onto the stage.
-   *
-   * @param event
-   * @throws Exception
    */
   @FXML
   private void logOutClicked(ActionEvent event) throws Exception {
@@ -161,9 +163,6 @@ public class Controller {
 
   /**
    * When the enter button is pressed. Calls onSubmitButtonClicked module.
-   *
-   * @param event
-   * @throws Exception
    */
   @FXML
   private void onEnter(ActionEvent event) throws Exception {
@@ -172,9 +171,6 @@ public class Controller {
 
   /**
    * When the enter button is pressed. Calls onSubmitButtonClicked module.
-   *
-   * @param event
-   * @throws Exception
    */
   @FXML
   private void addAnimal(ActionEvent event) {
@@ -197,7 +193,8 @@ public class Controller {
     }
     closeDb();
   }
-  public void deleteAnimal(){
+
+  public void deleteAnimal() {
     initializeDB();
     try {
       Animal animalToBeDeleted = (Animal) currentAnimals.getSelectionModel().getSelectedItem();
@@ -209,7 +206,8 @@ public class Controller {
       preparedStatement.executeUpdate();
 
       ObservableList<Animal> allAnimals = currentAnimals.getItems();
-      ObservableList<Animal> selectedAnimals = currentAnimals.getSelectionModel().getSelectedItems();
+      ObservableList<Animal> selectedAnimals = currentAnimals.getSelectionModel()
+          .getSelectedItems();
       selectedAnimals.forEach(allAnimals::remove);
 
     } catch (SQLException e) {
@@ -231,7 +229,7 @@ public class Controller {
         String name = rs.getString("Name");
         String animalSpecies = rs.getString("Species");
         int animalCollarId = rs.getInt("Collar_ID");
-        Animal tableOfAnimals = new Animal(name, animalSpecies,animalCollarId);
+        Animal tableOfAnimals = new Animal(name, animalSpecies, animalCollarId);
         arrOfAnimals.add(tableOfAnimals);
       }
       pets = FXCollections.observableList(arrOfAnimals);
@@ -246,88 +244,76 @@ public class Controller {
   private void search(ActionEvent event) {
     initializeDB();
     try {
-      System.out.println("Search has been pressed");
       String preparedStm = "";
       String searchFieldValue;
+      Boolean isAnimalTerm = false;
       PreparedStatement preparedStatement;
       ResultSet resultSet;
-      // If "Animal" chosen in first dropdown (combobox)
-      if (animalEmployeeCmbBx.getValue().equals("Animal")) {
-        // Depending on what they selected for "Search By" combobox, will change SELECT statement
-        if (searchCatgryCmbBx.getValue().equals("Collar ID")) {
-          // Select statement chooses animals that have the search term anywhere in their ID, Name,
-          // or Species
-          // Example: Search For: Animal, Search By: Collar ID, searchFieldValue = 1
-          // returns all animals with "1" in their collard ID. This will later be changed so you can
-          // choose to be specific or not
-          preparedStm = "SELECT * FROM ANIMAL WHERE COLLAR_ID LIKE ?;";
-        } else if (searchCatgryCmbBx.getValue().equals("Animal Name")) {
-          preparedStm = "SELECT * FROM ANIMAL WHERE NAME LIKE ?";
-        } else if (searchCatgryCmbBx.getValue().equals("Species")) {
-          preparedStm = "SELECT * FROM ANIMAL WHERE SPECIES LIKE ?";
-        }
-        // If chooses "Animal" and an employee specific "Search By", it will send an error and not
-        // execute the SQL, instead allowing user to reenter their search
-        else {
-          System.out.println("Cannot search for animals using employee search terms");
-          return;
-        }
-      }
-      // If "Employee" chosen in first combobox
-      else {
-        // look at if statement [if(animalEmployeeCmbBx...equals("Animal")] above for explanation
-        // because the functions are basically the same, except this is for employees
-        if (searchCatgryCmbBx.getValue().equals("Employee Num")) {
-          preparedStm = "SELECT * FROM EMPLOYEE WHERE EMPLOYEE_NUM LIKE ?";
-        } else if (searchCatgryCmbBx.getValue().equals("Emp First Name")) {
-          preparedStm = "SELECT * FROM EMPLOYEE WHERE FIRST_NAME LIKE ?";
-        } else if (searchCatgryCmbBx.getValue().equals("Emp Last Name")) {
-          preparedStm = "SELECT * FROM EMPLOYEE WHERE LAST_NAME LIKE ?";
-        } else if (searchCatgryCmbBx.getValue().equals("Job Class")) {
-          preparedStm = "SELECT * FROM EMPLOYEE WHERE JOB_CLASS LIKE ?";
-        } else {
-          System.out.println("Cannot search for employees using animal search terms");
-          return;
-        }
+      if (searchCatgryCmbBx.getValue().equals("Collar ID")) {
+        preparedStm = "SELECT * FROM ANIMAL WHERE COLLAR_ID LIKE ?;";
+        isAnimalTerm = true;
+      } else if (searchCatgryCmbBx.getValue().equals("Animal Name")) {
+        preparedStm = "SELECT * FROM ANIMAL WHERE NAME LIKE ?";
+        isAnimalTerm = true;
+      } else if (searchCatgryCmbBx.getValue().equals("Species")) {
+        preparedStm = "SELECT * FROM ANIMAL WHERE SPECIES LIKE ?";
+        isAnimalTerm = true;
+      } else if (searchCatgryCmbBx.getValue().equals("Employee Num")) {
+        preparedStm = "SELECT * FROM EMPLOYEE WHERE EMPLOYEE_NUM LIKE ?";
+        isAnimalTerm = false;
+      } else if (searchCatgryCmbBx.getValue().equals("Emp First Name")) {
+        preparedStm = "SELECT * FROM EMPLOYEE WHERE FIRST_NAME LIKE ?";
+        isAnimalTerm = false;
+      } else if (searchCatgryCmbBx.getValue().equals("Emp Last Name")) {
+        preparedStm = "SELECT * FROM EMPLOYEE WHERE LAST_NAME LIKE ?";
+        isAnimalTerm = false;
+      } else if (searchCatgryCmbBx.getValue().equals("Job Class")) {
+        preparedStm = "SELECT * FROM EMPLOYEE WHERE JOB_CLASS LIKE ?";
+        isAnimalTerm = false;
       }
       searchFieldValue = searchField.getText();
-      System.out.println(searchFieldValue);
       preparedStatement = conn.prepareStatement(preparedStm);
       preparedStatement.setString(1, "%" + searchFieldValue + "%");
       resultSet = preparedStatement.executeQuery();
 
-      if (animalEmployeeCmbBx.getValue().equals("Animal")) {
-        // Prints list of results of animal search
-        while (resultSet.next()) {
-          int collarID = resultSet.getInt("COLLAR_ID");
-          String animalName = resultSet.getString("NAME");
-          String species = resultSet.getString("SPECIES");
-
-          System.out.println("----------");
-          System.out.println("Collar ID: " + collarID);
-          System.out.println("Animal Name: " + animalName);
-          System.out.println("Species: " + species + "\n");
-        }
-      } else {
-        // Prints list of results of employee search
-        while (resultSet.next()) {
-          int empNum = resultSet.getInt("EMPLOYEE_NUM");
-          String empFirstName = resultSet.getString("FIRST_NAME");
-          String empLastName = resultSet.getString("LAST_NAME");
-          String jobClass = resultSet.getString("JOB_CLASS");
-
-          System.out.println("----------");
-          System.out.println("Employee Number: " + empNum);
-          System.out.println("Employee First Name: " + empFirstName);
-          System.out.println("Employee Last Name: " + empLastName);
-          System.out.println("Job Class: " + jobClass + "\n");
-        }
-      }
+      populateSearchResultsTable(resultSet);
 
     } catch (SQLException e) {
       e.printStackTrace();
     }
     closeDb();
+  }
+
+  @FXML
+  private void populateSearchResultsTable(ResultSet resultSet) {
+    ObservableList<ObservableList> obsListResults = FXCollections.observableArrayList();
+    try {
+      for (int i = 0; i < resultSet.getMetaData().getColumnCount(); i++) {
+        final int j = i;
+        TableColumn col = new TableColumn(resultSet.getMetaData().getColumnName(i + 1));
+        col.setCellValueFactory(
+            new Callback<CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
+              public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {
+                return new SimpleStringProperty(param.getValue().get(j).toString());
+              }
+            });
+        searchResultTable.getColumns().addAll(col);
+      }
+
+      while (resultSet.next()) {
+        //Iterate Row
+        ObservableList<String> row = FXCollections.observableArrayList();
+        for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
+          //Iterate Column
+          row.add(resultSet.getString(i));
+        }
+        obsListResults.add(row);
+      }
+
+      searchResultTable.setItems(obsListResults);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
   }
 
   public void populateEventsTable() {
@@ -337,7 +323,6 @@ public class Controller {
     ArrayList<AnimalEvent> arrOfEvents = new ArrayList();
     arrOfEvents.add(new AnimalEvent("Cleaning", "0001", "09/12/2020"));
     arrOfEvents.add(new AnimalEvent("Vet Checkup", "0002", "12/21/2012"));
-
 
     ObservableList events = FXCollections.observableList(arrOfEvents);
     eventsTable.setItems(events);
@@ -366,7 +351,8 @@ public class Controller {
       System.out.println("Error in SQL please try again");
     }
   }
-  public void closeDb(){
+
+  public void closeDb() {
     try {
       stmt.close();
       conn.close();
