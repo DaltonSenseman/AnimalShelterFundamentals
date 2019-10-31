@@ -8,6 +8,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -72,6 +73,18 @@ public class Controller {
 
   @FXML
   private TextField species;
+  @FXML
+  private ComboBox<String> animalGender = new ComboBox<>();
+
+  @FXML
+  private TextField breed;
+  @FXML
+  private ComboBox<Integer> kennelNumber = new ComboBox<>();
+
+  @FXML
+  private TextField animalAge;
+  @FXML
+  private TextField dateAddedToShelter;
 
   @FXML
   private TableView currentAnimals = new TableView();
@@ -104,17 +117,33 @@ public class Controller {
     searchCatgryCmbBx.getItems()
         .addAll("Collar ID", "Animal Name", "Species", "Employee Num", "Emp First Name",
             "Emp Last Name", "Job Class");
+    animalGender.getItems().addAll("Male", "Female");
+    animalGender.setEditable(false);
+    kennelNumber.getItems().addAll(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+    kennelNumber.setEditable(false);
 
     TableColumn<Animal, Integer> idNumber = new TableColumn<>("Collar ID");
     idNumber.setCellValueFactory(new PropertyValueFactory<>("collarID"));
     TableColumn<Animal, String> currentName = new TableColumn<>("Name");
     currentName.setCellValueFactory(new PropertyValueFactory<>("name"));
+    TableColumn<Animal, String> gend = new TableColumn<>("Gender");
+    gend.setCellValueFactory(new PropertyValueFactory<>("animalGender"));
+    TableColumn<Animal, Integer> age = new TableColumn<>("Age");
+    age.setCellValueFactory(new PropertyValueFactory<>("age"));
+    TableColumn<Animal, Integer> currentKennel = new TableColumn<>("Kennel Location");
+    currentKennel.setCellValueFactory(new PropertyValueFactory<>("kennelNumber"));
     TableColumn<Animal, String> currentType = new TableColumn<>("Species");
     currentType.setCellValueFactory(new PropertyValueFactory<>("species"));
+    TableColumn<Animal, String> dateAddedToShelter = new TableColumn<>("Date joined");
+    dateAddedToShelter.setCellValueFactory(new PropertyValueFactory<>("dateAdmitted"));
 
     currentAnimals.getColumns().add(idNumber);
     currentAnimals.getColumns().add(currentName);
+    currentAnimals.getColumns().add(gend);
+    currentAnimals.getColumns().add(age);
+    currentAnimals.getColumns().add(currentKennel);
     currentAnimals.getColumns().add(currentType);
+    currentAnimals.getColumns().add(dateAddedToShelter);
 
     populateTable();
 
@@ -177,16 +206,25 @@ public class Controller {
     initializeDB();
     try {
       // Obtains the input from the text fields
+
       String newAnimalName = animalName.getText();
+      String newAnimalAge = animalAge.getText();
+      String newAnimalBreed = breed.getText();
+      String newAnimalGender = animalGender.getValue();
+      String newAdmission = dateAddedToShelter.getText();
       String newSpecies = species.getText();
-      String preparedStm = "INSERT INTO ANIMAL( NAME, SPECIES) VALUES ( ?, ? );";
+      int newKennelLocation = kennelNumber.getSelectionModel().getSelectedItem();
+      String preparedStm = "INSERT INTO ANIMAL( NAME, SPECIES, BREED, AGE, DATE_ADMITTED, KENNEL_NUMBER, GENDER) VALUES (?,?,?,?,?,?,?);";
       PreparedStatement preparedStatement = conn.prepareStatement(preparedStm);
       preparedStatement.setString(1, newAnimalName);
       preparedStatement.setString(2, newSpecies);
+      preparedStatement.setString(3, newAnimalBreed);
+      preparedStatement.setInt(4, Integer.parseInt(newAnimalAge));
+      preparedStatement.setString(5, newAdmission);
+      preparedStatement.setInt(6, newKennelLocation);
+      preparedStatement.setString(7, newAnimalGender);
       preparedStatement.executeUpdate();
-
       populateTable();
-
     } catch (SQLException e) {
       e.printStackTrace();
 
@@ -204,7 +242,6 @@ public class Controller {
       preparedStatement = conn.prepareStatement(preparedStm);
       preparedStatement.setInt(1, delete);
       preparedStatement.executeUpdate();
-
       ObservableList<Animal> allAnimals = currentAnimals.getItems();
       ObservableList<Animal> selectedAnimals = currentAnimals.getSelectionModel()
           .getSelectedItems();
@@ -220,16 +257,21 @@ public class Controller {
   public void populateTable() {
     initializeDB();
     String sql = "SELECT * FROM ANIMAL;";
-    ResultSet rs;
     try {
       arrOfAnimals.clear();
       pets.clear();
-      rs = stmt.executeQuery(sql);
+      ResultSet rs = stmt.executeQuery(sql);
       while (rs.next()) {
         String name = rs.getString("Name");
         String animalSpecies = rs.getString("Species");
         int animalCollarId = rs.getInt("Collar_ID");
-        Animal tableOfAnimals = new Animal(name, animalSpecies, animalCollarId);
+        String tempBreed = rs.getString("BREED");
+        int tempAge = rs.getInt("AGE");
+        String tempDate = rs.getString("DATE_ADMITTED");
+        int tempKennel = rs.getInt("KENNEL_NUMBER");
+        String tempGender = rs.getString("GENDER");
+        Animal tableOfAnimals = new Animal(name, animalSpecies, tempBreed, tempAge, tempKennel,
+            tempGender, animalCollarId, tempDate);
         arrOfAnimals.add(tableOfAnimals);
       }
       pets = FXCollections.observableList(arrOfAnimals);
@@ -243,6 +285,7 @@ public class Controller {
   @FXML
   private void search(ActionEvent event) {
     initializeDB();
+
     try {
       String preparedStm = "";
       String searchFieldValue;

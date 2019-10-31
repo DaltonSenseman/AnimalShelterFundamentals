@@ -1,5 +1,7 @@
 package io.github.animalshelter;
 
+import java.util.Date;
+
 /**
  * The class allows the creation of animal objects
  *
@@ -13,14 +15,62 @@ public class Animal {
 
   private String name;
   private String species;
+  private String breed;
+  private int age;
+  private int kennelNumber;
+  private String animalGender;
   private int collarID;
+  private String dateAdmitted;
 
-  public Animal( String name, String species, int collarID) {
+  public Animal(String name, String species, int collarID) {
     this.name = name;
     this.species = species;
     this.collarID = collarID;
   }
 
+  public Animal(String name, String species, String breed, int age, int kennelNumber,
+      String animalGender, int collarID, String dateAdmitted) {
+    this.name = name;
+    this.species = species;
+    this.breed = breed;
+    this.age = age;
+    this.kennelNumber = kennelNumber;
+    this.animalGender = animalGender;
+    this.collarID = collarID;
+    this.dateAdmitted = dateAdmitted;
+  }
+
+  public String getBreed() {
+    return breed;
+  }
+
+  public void setBreed(String breed) {
+    this.breed = breed;
+  }
+
+  public int getAge() {
+    return age;
+  }
+
+  public void setAge(int age) {
+    this.age = age;
+  }
+
+  public int getKennelNumber() {
+    return kennelNumber;
+  }
+
+  public void setKennelNumber(int kennelNumber) {
+    this.kennelNumber = kennelNumber;
+  }
+
+  public String getAnimalGender() {
+    return animalGender;
+  }
+
+  public void setAnimalGender(String animalGender) {
+    this.animalGender = animalGender;
+  }
 
   public int getCollarID() {
     return collarID;
@@ -47,5 +97,11 @@ public class Animal {
     this.species = species;
   }
 
+  public String getDateAdmitted() {
+    return dateAdmitted;
+  }
 
+  public void setDateAdmitted(String dateAdmitted) {
+    this.dateAdmitted = dateAdmitted;
+  }
 }
