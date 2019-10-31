@@ -13,21 +13,23 @@ public class Animal {
 
   private String name;
   private String species;
-  private String id;
+  private int collarID;
 
-  public Animal(String id, String name, String species) {
-    this.id = id;
+  public Animal( String name, String species, int collarID) {
     this.name = name;
     this.species = species;
+    this.collarID = collarID;
   }
 
-  public String getId() {
-    return id;
+
+  public int getCollarID() {
+    return collarID;
   }
 
-  public void setId(String id) {
-    this.id = id;
+  public void setCollarID(int collarID) {
+    this.collarID = collarID;
   }
+
 
   public String getName() {
     return name;
