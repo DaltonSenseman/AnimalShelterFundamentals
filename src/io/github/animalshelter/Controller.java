@@ -19,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
@@ -105,9 +106,23 @@ public class Controller {
   @FXML
   private TableView<AnimalEvent> eventsTable = new TableView();
 
+  @FXML
+  private ChoiceBox<String> eventTypeChoice;
+
+  @FXML
+  private DatePicker eventDatePick;
+
+  @FXML
+  private TextField animalNameField;
+
+  @FXML
+  private Button addEventBtn;
+
+  private ObservableList animalEvents;
 
   final ArrayList<Animal> arrOfAnimals = new ArrayList();
   ObservableList<Animal> pets;
+
 
 
   public void initialize() {
@@ -147,15 +162,8 @@ public class Controller {
 
     populateTable();
 
-    TableColumn<AnimalEvent, String> eventType = new TableColumn<>("Type");
-    eventType.setCellValueFactory(new PropertyValueFactory<>("eventType"));
-    TableColumn<AnimalEvent, String> eventAnimalID = new TableColumn<>("Animal ID");
-    eventAnimalID.setCellValueFactory(new PropertyValueFactory<>("animalID"));
-    TableColumn<AnimalEvent, String> eventDate = new TableColumn<>("Date");
-    eventDate.setCellValueFactory(new PropertyValueFactory<>("eventDate"));
-
-    eventsTable.getColumns().addAll(eventType, eventAnimalID, eventDate);
-
+    // Setup Events Table
+    setupEventsTable();
     populateEventsTable();
   }
 
@@ -255,9 +263,11 @@ public class Controller {
   }
 
   public void populateTable() {
+
     initializeDB();
-    String sql = "SELECT * FROM ANIMAL;";
     try {
+
+      String sql = "SELECT * FROM ANIMAL;";
       arrOfAnimals.clear();
       pets.clear();
       ResultSet rs = stmt.executeQuery(sql);
@@ -359,16 +369,95 @@ public class Controller {
     }
   }
 
+  public void setupEventsTable() {
+    TableColumn<AnimalEvent, String> eventType = new TableColumn<>("Type");
+    eventType.setCellValueFactory(new PropertyValueFactory<>("eventType"));
+    TableColumn<AnimalEvent, String> eventAnimalName = new TableColumn<>("Animal Name");
+    eventAnimalName.setCellValueFactory(new PropertyValueFactory<>("animalName"));
+    TableColumn<AnimalEvent, String> eventDate = new TableColumn<>("Date");
+    eventDate.setCellValueFactory(new PropertyValueFactory<>("eventDate"));
+
+    eventsTable.getColumns().addAll(eventType, eventAnimalName, eventDate);
+
+    animalEvents = FXCollections.observableArrayList();
+    eventsTable.setItems(animalEvents);
+  }
+
   public void populateEventsTable() {
     initializeDB();
 
-    // Hard coded populate for eventsTable
-    ArrayList<AnimalEvent> arrOfEvents = new ArrayList();
-    arrOfEvents.add(new AnimalEvent("Cleaning", "0001", "09/12/2020"));
-    arrOfEvents.add(new AnimalEvent("Vet Checkup", "0002", "12/21/2012"));
+    animalEvents.clear();
+    try {
+      ResultSet resultSet;
+      String query = "SELECT * FROM EVENTS";
+      resultSet = stmt.executeQuery(query);
 
-    ObservableList events = FXCollections.observableList(arrOfEvents);
-    eventsTable.setItems(events);
+      int eventID;
+      String eventType;
+      String animalName;
+      String eventDate;
+
+      while (resultSet.next()) {
+        eventID = resultSet.getInt("COLLAR_ID");
+        eventType = resultSet.getString("EVENT_TYPE");
+        animalName = resultSet.getString("ANIMAL_NAME");
+        eventDate = resultSet.getString("EVENT_DATE");
+
+        animalEvents.add(new AnimalEvent(eventID ,eventType, animalName, eventDate));
+      }
+
+    } catch(SQLException e) {
+      e.printStackTrace();
+    }
+    closeDb();
+  }
+
+
+  public void addToEventsTable(ActionEvent actionEvent) {
+    initializeDB();
+
+    try {
+
+      // Obtains the input from the text fields
+      String eventType = eventTypeChoice.getValue();
+      String animalName = animalNameField.getText();
+      String eventDate = eventDatePick.getValue().toString();
+
+      String preparedStm = "INSERT INTO EVENTS( EVENT_TYPE, ANIMAL_NAME, EVENT_DATE) VALUES (?,?,?);";
+      PreparedStatement preparedStatement = conn.prepareStatement(preparedStm);
+
+      preparedStatement.setString(1, eventType);
+      preparedStatement.setString(2, animalName);
+      preparedStatement.setString(3, eventDate);
+
+      preparedStatement.executeUpdate();
+
+      populateEventsTable();
+    } catch(SQLException e) {
+      e.printStackTrace();
+    }
+    closeDb();
+  }
+
+  public void removeFromEventsTable(ActionEvent actionEvent) {
+    initializeDB();
+    try {
+
+      AnimalEvent eventToBeDeleted = (AnimalEvent) eventsTable.getSelectionModel().getSelectedItem();
+      int idToDelete = eventToBeDeleted.getCollarID();
+      String preparedStm = "DELETE FROM EVENTS WHERE COLLAR_ID = ?;";
+
+      PreparedStatement preparedStatement = conn.prepareStatement(preparedStm);
+      preparedStatement.setInt(1, idToDelete);
+      preparedStatement.executeUpdate();
+
+      ObservableList<AnimalEvent> allEvents = eventsTable.getItems();
+      ObservableList<AnimalEvent> selectedEvents = eventsTable.getSelectionModel().getSelectedItems();
+      selectedEvents.forEach(allEvents::remove);
+
+    } catch(SQLException e) {
+      e.printStackTrace();
+    }
     closeDb();
   }
 

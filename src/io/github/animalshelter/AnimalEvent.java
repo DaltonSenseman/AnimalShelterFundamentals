@@ -10,18 +10,28 @@ package io.github.animalshelter;
  * @author William Ramanand
  */
 public class AnimalEvent {
-  private String animalID;
+  private int collarID;
+  private String animalName;
   private String eventType;
   private String eventDate;
 
-  public AnimalEvent(String eventType, String animalID, String eventDate) {
+  public AnimalEvent(int collarID, String eventType, String animalName, String eventDate) {
+    this.collarID = collarID;
     this.eventType = eventType;
-    this.animalID = animalID;
+    this.animalName = animalName;
     this.eventDate = eventDate;
   }
 
-  public String getAnimalID() {
-    return animalID;
+  public int getCollarID() {
+    return collarID;
+  }
+
+  public void setEventID(int eventID) {
+    this.collarID = collarID;
+  }
+
+  public String getAnimalName() {
+    return animalName;
   }
 
   public String getEventType() {
@@ -32,8 +42,8 @@ public class AnimalEvent {
     return eventDate;
   }
 
-  public void setAnimalID(String animalID) {
-    this.animalID = animalID;
+  public void setAnimalID(String animalName) {
+    this.animalName = animalName;
   }
 
   public void setEventType(String eventType) {
