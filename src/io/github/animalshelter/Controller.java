@@ -1,5 +1,6 @@
 package io.github.animalshelter;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -21,6 +22,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -47,10 +50,13 @@ public class Controller {
   Statement stmt = null;
 
   @FXML
+  private Button openSearchBtn;
+
+  @FXML
   private Button loginSubmitButton;
 
   @FXML
-  private Button logOutButton;
+  private MenuBar menuBar;
 
   @FXML
   private Button addAnimalBtn;
@@ -107,7 +113,7 @@ public class Controller {
   private TableView<AnimalEvent> eventsTable = new TableView();
 
   @FXML
-  private ChoiceBox<String> eventTypeChoice;
+  private ChoiceBox<String> eventTypeChoice = new ChoiceBox<>();
 
   @FXML
   private DatePicker eventDatePick;
@@ -162,7 +168,8 @@ public class Controller {
 
     populateTable();
 
-    // Setup Events Table
+    // Setup Events Tab
+    eventTypeChoice.getItems().addAll("Vet Checkup", "Cleaning");
     setupEventsTable();
     populateEventsTable();
   }
@@ -174,7 +181,7 @@ public class Controller {
   @FXML
   private void onSubmitButtonClicked(ActionEvent event) throws Exception {
     Stage stage = (Stage) loginSubmitButton.getScene().getWindow();
-    Parent main = FXMLLoader.load(getClass().getResource("animalshelter.fxml"));
+    Parent main = FXMLLoader.load(getClass().getResource("animalshelterGUI.fxml"));
 
     // Check username and password field in order to login
     if (loginUserField.getText().equals("username") && loginPassField.getText()
@@ -191,7 +198,7 @@ public class Controller {
    */
   @FXML
   private void logOutClicked(ActionEvent event) throws Exception {
-    Stage stage = (Stage) logOutButton.getScene().getWindow();
+    Stage stage = (Stage) menuBar.getScene().getWindow();
     Parent login = FXMLLoader.load(getClass().getResource("animalShelterLogin.fxml"));
 
     stage.setScene(new Scene(login));
@@ -459,6 +466,32 @@ public class Controller {
       e.printStackTrace();
     }
     closeDb();
+  }
+
+  @FXML
+  public void openSearchDialog() {
+    try {
+      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("searchWindow.fxml"));
+      Parent root1 = (Parent) fxmlLoader.load();
+      Stage stage = new Stage();
+      stage.setScene(new Scene(root1));
+      stage.show();
+    } catch (IOException e) {
+      System.out.println("Failed to open Search Window!");
+    }
+  }
+
+  @FXML
+  public void openAddEmployeeDialog() {
+    try {
+      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("employeeAddPage.fxml"));
+      Parent root1 = (Parent) fxmlLoader.load();
+      Stage stage = new Stage();
+      stage.setScene(new Scene(root1));
+      stage.show();
+    } catch (IOException e) {
+      System.out.println("Failed to open Employee Add Window!");
+    }
   }
 
   public void initializeDB() {

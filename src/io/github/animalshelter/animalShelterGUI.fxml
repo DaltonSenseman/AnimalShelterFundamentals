@@ -19,11 +19,11 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.animalshelter.Controller">
   <top>
-    <MenuBar BorderPane.alignment="CENTER">
+    <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
       <Menu mnemonicParsing="false" text="File">
-        <MenuItem mnemonicParsing="false" text="Logout"/>
+        <MenuItem  mnemonicParsing="false" text="Logout" onAction="#logOutClicked"/>
       </Menu>
       <Menu mnemonicParsing="false" text="Help">
         <MenuItem mnemonicParsing="false" text="About"/>
@@ -34,7 +34,7 @@
     <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
       <top>
         <FlowPane prefHeight="50.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
-          <Button maxHeight="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0"
+          <Button fx:id="openSearchBtn" onAction="#openSearchDialog" maxHeight="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0"
             prefWidth="120.0" text="Search">
             <FlowPane.margin>
               <Insets left="10.0"/>
@@ -148,7 +148,7 @@
                     <Font size="24.0"/>
                   </font>
                 </Label>
-                <Label text="Animal ID" GridPane.columnIndex="1"
+                <Label text="Animal Name" GridPane.columnIndex="1"
                   GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                   <GridPane.margin>
                     <Insets right="20.0"/>
@@ -166,11 +166,11 @@
                     <Font size="24.0"/>
                   </font>
                 </Label>
-                <ChoiceBox prefWidth="150.0" GridPane.columnIndex="2"
+                <ChoiceBox fx:id="eventTypeChoice" prefWidth="150.0" GridPane.columnIndex="2"
                   GridPane.rowIndex="1"/>
-                <TextField GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-                <DatePicker GridPane.columnIndex="2" GridPane.rowIndex="3"/>
-                <Button mnemonicParsing="false" text="Add Event" GridPane.columnIndex="2"
+                <TextField fx:id="animalNameField" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                <DatePicker fx:id="eventDatePick" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                <Button fx:id="addEventBtn" onAction="#addToEventsTable" mnemonicParsing="false" text="Add Event" GridPane.columnIndex="2"
                   GridPane.rowIndex="4">
                   <font>
                     <Font size="24.0"/>
@@ -186,13 +186,8 @@
                   <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="30.0"
                     vgrow="SOMETIMES"/>
                 </rowConstraints>
-                <TableView prefHeight="200.0" prefWidth="200.0">
-                  <columns>
-                    <TableColumn prefWidth="75.0" text="C1"/>
-                    <TableColumn prefWidth="75.0" text="C2"/>
-                  </columns>
-                </TableView>
-                <Button mnemonicParsing="false" text="Remove Event"
+                <TableView fx:id="eventsTable" prefHeight="200.0" prefWidth="200.0"/>
+                <Button onAction="#removeFromEventsTable" mnemonicParsing="false" text="Remove Event"
                   GridPane.halignment="CENTER" GridPane.rowIndex="1"
                   GridPane.valignment="CENTER">
                   <font>
@@ -236,7 +231,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0"
                     vgrow="SOMETIMES"/>
                 </rowConstraints>
-                <Button mnemonicParsing="false" text="Add"
+                <Button onAction="#openAddEmployeeDialog" mnemonicParsing="false" text="Add"
                   GridPane.halignment="RIGHT">
                   <GridPane.margin>
                     <Insets right="20.0"/>
