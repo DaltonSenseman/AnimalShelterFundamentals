@@ -64,7 +64,7 @@ public class Controller {
   @FXML
   private Button addAnimalBtn;
   @FXML
-  private Button deleteAnimal;
+  private Button deleteAnimalBtn;
 
   @FXML
   private Button animalIDSearchButton;
@@ -83,12 +83,17 @@ public class Controller {
   @FXML
   private TextField breed;
   @FXML
+  private TextField animalWeight;
+  @FXML
   private ComboBox<Integer> kennelNumber = new ComboBox<>();
 
   @FXML
   private TextField animalAge;
   @FXML
-  private TextField dateAddedToShelter;
+  private ComboBox<String> animalSize = new ComboBox<>();
+
+  @FXML
+  private CheckBox neuteredCheckBox = new CheckBox();
 
   @FXML
   private TableView currentAnimals = new TableView();
@@ -166,7 +171,6 @@ public class Controller {
   ObservableList<Animal> pets;
 
 
-
   public void initialize() {
     pets = FXCollections.observableList(arrOfAnimals);
     // Sets choices in search dropdown
@@ -176,6 +180,7 @@ public class Controller {
             "Emp Last Name", "Job Class");
     animalGender.getItems().addAll("Male", "Female");
     animalGender.setEditable(false);
+    animalSize.getItems().addAll("Small", "Medium","Large");
     kennelNumber.getItems().addAll(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
     kennelNumber.setEditable(false);
 
@@ -259,6 +264,7 @@ public class Controller {
    */
   @FXML
   private void addAnimal(ActionEvent event) {
+    initializeDB();
     try {
       // Obtains the input from the text fields
 
@@ -266,25 +272,52 @@ public class Controller {
       String newAnimalAge = animalAge.getText();
       String newAnimalBreed = breed.getText();
       String newAnimalGender = animalGender.getValue();
-      String newAdmission = dateAddedToShelter.getText();
+      String newSize = animalSize.getValue();
+      int newWeight = Integer.parseInt(animalWeight.getText());
+      boolean isAnimalNeutered = neuteredCheckBox.isSelected();
+      Date tempDate = new Date();
       String newSpecies = species.getText();
       int newKennelLocation = kennelNumber.getSelectionModel().getSelectedItem();
-      String preparedStm = "INSERT INTO ANIMAL( NAME, SPECIES, BREED, AGE, DATE_ADMITTED, KENNEL_NUMBER, GENDER) VALUES (?,?,?,?,?,?,?);";
+
+      String preparedStm = "INSERT INTO ANIMAL( NAME, SPECIES, BREED, AGE, DATE_ADMITTED, KENNEL_NUMBER, GENDER, NEUTERED, WEIGHT,SIZE) VALUES (?,?,?,?,?,?,?,?,?,?);";
       PreparedStatement preparedStatement = conn.prepareStatement(preparedStm);
       preparedStatement.setString(1, newAnimalName);
       preparedStatement.setString(2, newSpecies);
       preparedStatement.setString(3, newAnimalBreed);
       preparedStatement.setInt(4, Integer.parseInt(newAnimalAge));
-      preparedStatement.setString(5, newAdmission);
+      preparedStatement.setString(5, String.valueOf(tempDate));
       preparedStatement.setInt(6, newKennelLocation);
       preparedStatement.setString(7, newAnimalGender);
+      preparedStatement.setBoolean(8, isAnimalNeutered);
+      preparedStatement.setInt(9, newWeight);
+      preparedStatement.setString(10, newSize);
       preparedStatement.executeUpdate();
+
       populateTable();
+
     } catch (SQLException e) {
       e.printStackTrace();
 
+    } finally {
+      Stage stage = (Stage) addAnimalBtn.getScene().getWindow();
+      stage.close();
+      closeDb();
     }
-    closeDb();
+
+  }
+
+  @FXML
+  public void openAddAnimalDialog() {
+    try {
+      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("animalAddPage.fxml"));
+      Parent root1 = (Parent) fxmlLoader.load();
+      Stage stage = new Stage();
+      stage.setScene(new Scene(root1));
+      stage.showAndWait();
+      populateTable();
+    } catch (IOException e) {
+      System.out.println("Failed to open Animal Add Window!");
+    }
   }
 
   public void deleteAnimal() {
@@ -450,10 +483,10 @@ public class Controller {
         animalName = resultSet.getString("ANIMAL_NAME");
         eventDate = resultSet.getString("EVENT_DATE");
 
-        animalEvents.add(new AnimalEvent(eventID ,eventType, animalName, eventDate));
+        animalEvents.add(new AnimalEvent(eventID, eventType, animalName, eventDate));
       }
 
-    } catch(SQLException e) {
+    } catch (SQLException e) {
       e.printStackTrace();
     }
     closeDb();
@@ -481,7 +514,7 @@ public class Controller {
 
       preparedStatement.close();
       populateEventsTable();
-    } catch(SQLException e) {
+    } catch (SQLException e) {
       e.printStackTrace();
     }
     closeDb();
@@ -491,7 +524,8 @@ public class Controller {
     initializeDB();
     try {
 
-      AnimalEvent eventToBeDeleted = (AnimalEvent) eventsTable.getSelectionModel().getSelectedItem();
+      AnimalEvent eventToBeDeleted = (AnimalEvent) eventsTable.getSelectionModel()
+          .getSelectedItem();
       int idToDelete = eventToBeDeleted.getCollarID();
       String preparedStm = "DELETE FROM EVENTS WHERE COLLAR_ID = ?;";
 
@@ -500,10 +534,11 @@ public class Controller {
       preparedStatement.executeUpdate();
 
       ObservableList<AnimalEvent> allEvents = eventsTable.getItems();
-      ObservableList<AnimalEvent> selectedEvents = eventsTable.getSelectionModel().getSelectedItems();
+      ObservableList<AnimalEvent> selectedEvents = eventsTable.getSelectionModel()
+          .getSelectedItems();
       selectedEvents.forEach(allEvents::remove);
 
-    } catch(SQLException e) {
+    } catch (SQLException e) {
       e.printStackTrace();
     }
     closeDb();
@@ -540,8 +575,9 @@ public class Controller {
     TableColumn<Employee, String> employeeAssignedTask = new TableColumn<>("Assigned Task");
     employeeAssignedTask.setCellValueFactory(new PropertyValueFactory<>("assignedTask"));
 
-
-    employeesTable.getColumns().addAll(employeeNum, employeeFirstName, employeeLastName, employeeJobClass, employeePhone, employeePayRate, employeeHireDate, employeeAssignedTask);
+    employeesTable.getColumns()
+        .addAll(employeeNum, employeeFirstName, employeeLastName, employeeJobClass, employeePhone,
+            employeePayRate, employeeHireDate, employeeAssignedTask);
 
     employees = FXCollections.observableArrayList();
     employeesTable.setItems(employees);
@@ -575,10 +611,12 @@ public class Controller {
         hireDate = resultSet.getString("HIRE_DATE");
         assignedTask = resultSet.getString("ASSIGNED_TASK");
 
-        employees.add(new Employee(employeeNum, firstName, lastName, jobClass, phoneNumber, payRate, hireDate, assignedTask));
+        employees.add(
+            new Employee(employeeNum, firstName, lastName, jobClass, phoneNumber, payRate, hireDate,
+                assignedTask));
       }
 
-    } catch(SQLException e) {
+    } catch (SQLException e) {
       e.printStackTrace();
     }
     closeDb();
@@ -598,7 +636,7 @@ public class Controller {
     }
   }
 
-   /**********WORK_IN_PROGRESS**********/
+  /**********WORK_IN_PROGRESS**********/
   @FXML
   public void addEmployee() {
     //gathers input from Add Employee page
@@ -630,19 +668,22 @@ public class Controller {
       preparedStatement.executeUpdate();
 
       preparedStatement.close();
-    } catch(SQLException e) {
+    } catch (SQLException e) {
       e.printStackTrace();
+    } finally {
+      Stage stage = (Stage) addEmployeeBtn.getScene().getWindow();
+      stage.close();
+      closeDb();
     }
-    Stage stage = (Stage) addEmployeeBtn.getScene().getWindow();
-    stage.close();
-    closeDb();
+
   }
 
   public void removeFromEmployeesTable(ActionEvent actionEvent) {
     initializeDB();
     try {
 
-      Employee employeeToBeDeleted = (Employee) employeesTable.getSelectionModel().getSelectedItem();
+      Employee employeeToBeDeleted = (Employee) employeesTable.getSelectionModel()
+          .getSelectedItem();
       int idToDelete = employeeToBeDeleted.getEmployeeNum();
       String preparedStm = "DELETE FROM EMPLOYEE WHERE EMPLOYEE_NUM = ?;";
 
@@ -651,10 +692,11 @@ public class Controller {
       preparedStatement.executeUpdate();
 
       ObservableList<Employee> allEvents = employeesTable.getItems();
-      ObservableList<Employee> selectedEvents = employeesTable.getSelectionModel().getSelectedItems();
+      ObservableList<Employee> selectedEvents = employeesTable.getSelectionModel()
+          .getSelectedItems();
       selectedEvents.forEach(allEvents::remove);
 
-    } catch(SQLException e) {
+    } catch (SQLException e) {
       e.printStackTrace();
     }
     closeDb();
@@ -675,7 +717,7 @@ public class Controller {
 
       stmt = conn.createStatement();
     } catch (ClassNotFoundException e) {
-       e.printStackTrace();
+      e.printStackTrace();
       System.out.println("Unable to find class");
     } catch (SQLException e) {
       e.printStackTrace();
