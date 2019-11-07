@@ -675,7 +675,7 @@ public class Controller {
 
       stmt = conn.createStatement();
     } catch (ClassNotFoundException e) {
-      // e.printStackTrace();
+       e.printStackTrace();
       System.out.println("Unable to find class");
     } catch (SQLException e) {
       e.printStackTrace();
