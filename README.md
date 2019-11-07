@@ -32,6 +32,7 @@
 ### Requirements
 - Windows 7 or higher
 - Java 1.8 or higher
+- H2 Jar file need to run the program.
 
 ### History
 Version: 1.0 
