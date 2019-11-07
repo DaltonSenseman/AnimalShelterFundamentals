@@ -49,22 +49,9 @@ public class Controller {
   Connection conn = null;
   Statement stmt = null;
 
-  @FXML
-  private Button openSearchBtn;
-
+  //********* LOGIN_SCREEN_FX_ID*****
   @FXML
   private Button loginSubmitButton;
-
-  @FXML
-  private MenuBar menuBar;
-
-  @FXML
-  private Button addAnimalBtn;
-  @FXML
-  private Button deleteAnimal;
-
-  @FXML
-  private Button animalIDSearchButton;
 
   @FXML
   private TextField loginUserField;
@@ -74,7 +61,27 @@ public class Controller {
 
   @FXML
   private Label loginFailedLabel;
+  //*********************************
 
+
+  //********* MISCELLANEOUS_FX_ID****
+  @FXML
+  private MenuBar menuBar;
+
+  @FXML
+  private Button openSearchBtn;
+
+  @FXML
+  private Button addAnimalBtn;
+  @FXML
+  private Button deleteAnimal;
+
+  @FXML
+  private Button animalIDSearchButton;
+  //*********************************
+
+
+  //********* ADD_ANIMAL_FX_ID*******
   @FXML
   private TextField animalName;
 
@@ -95,6 +102,41 @@ public class Controller {
 
   @FXML
   private TableView currentAnimals = new TableView();
+  //*********************************
+
+
+  //********* ADD_EMPLOYEE_FX_ID******
+  @FXML
+  private TextField employeeFirstName;
+
+  @FXML
+  private TextField employeeLastName;
+
+  @FXML
+  private TextField employeeNumber;
+
+  @FXML
+  private ComboBox<String> jobTitle = new ComboBox<>();
+
+  @FXML
+  private TextField employeePhone;
+
+  @FXML
+  private TextField payRate;
+
+  @FXML
+  private DatePicker hireDate;
+
+  @FXML
+  private TextField empUsername;
+
+  @FXML
+  private TextField empPassword;
+
+  @FXML
+  private Button addEmployeeBtn;
+  //**********************************
+
 
   // Search Function Declarations
   @FXML
@@ -218,7 +260,6 @@ public class Controller {
    */
   @FXML
   private void addAnimal(ActionEvent event) {
-    initializeDB();
     try {
       // Obtains the input from the text fields
 
@@ -481,6 +522,7 @@ public class Controller {
     }
   }
 
+
   @FXML
   public void openAddEmployeeDialog() {
     try {
@@ -493,6 +535,33 @@ public class Controller {
       System.out.println("Failed to open Employee Add Window!");
     }
   }
+
+   /*
+   *********WORK_IN_PROGRESS**********
+  @FXML
+  public void addEmployee(ActionEvent event){
+    //gathers input from Add Employee page
+    try{
+
+      String addFirstName = employeeFirstName.getText();
+      String addLastName = employeeLastName.getText();
+      String addEmployeeNum = employeeNumber.getText();
+      String addJobTitle = jobTitle.getValue();
+      String addPhoneNumber = employeePhone.getText();
+      String addPayRate = payRate.getText();
+      String addHireDate = hireDate.getValue().toString();
+      String addUsername = empUsername.getText();
+      String addPassword = empPassword.getText();
+
+     create prepared statement here
+
+    }
+    catch (SQLException except){
+      except.printStackTrace();
+    }
+
+  }
+   */
 
   public void initializeDB() {
     // Connection to the database
