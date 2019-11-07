@@ -17,17 +17,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.beans.value.ObservableValue;
@@ -601,7 +591,8 @@ public class Controller {
       Parent root1 = (Parent) fxmlLoader.load();
       Stage stage = new Stage();
       stage.setScene(new Scene(root1));
-      stage.show();
+      stage.showAndWait();
+      populateEmployeesTable();
     } catch (IOException e) {
       System.out.println("Failed to open Employee Add Window!");
     }
@@ -639,10 +630,11 @@ public class Controller {
       preparedStatement.executeUpdate();
 
       preparedStatement.close();
-      populateEmployeesTable();
     } catch(SQLException e) {
       e.printStackTrace();
     }
+    Stage stage = (Stage) addEmployeeBtn.getScene().getWindow();
+    stage.close();
     closeDb();
   }
 
