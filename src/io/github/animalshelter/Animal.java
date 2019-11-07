@@ -1,7 +1,5 @@
 package io.github.animalshelter;
 
-import java.util.Date;
-
 /**
  * The class allows the creation of animal objects
  *
