@@ -179,11 +179,15 @@ public class Controller {
 
   public void initialize() {
     pets = FXCollections.observableList(arrOfAnimals);
-    // Sets choices in search dropdown
+
+// Search Page Initializations
     animalEmployeeCmbBx.getItems().addAll("Animal", "Employee");
-    searchCatgryCmbBx.getItems()
-        .addAll("Collar ID", "Animal Name", "Species", "Employee Num", "Emp First Name",
-            "Emp Last Name", "Job Class");
+    searchCatgryCmbBx.getItems() // Sets choices for dropdown in Search page
+        .addAll("Collar ID", "Animal Name", "Species", "Breed", "Animal Age",
+            "Date Admitted", "Kennel Number", "Employee Number", "Employee First Name",
+            "Employee Last Name", "Job Class", "Assigned Task", "Phone Number", "Pay Rate", "Username");
+    searchCatgryCmbBx.getSelectionModel().selectFirst(); // Sets default choice in dropdown
+
     animalGender.getItems().addAll("Male", "Female");
     animalGender.setEditable(false);
     kennelNumber.getItems().addAll(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
@@ -349,6 +353,14 @@ public class Controller {
     closeDb();
   }
 
+  //********* SEARCH PAGE FUNCTIONS ***************************************************************
+  /**
+   * Receives input from "searchCatgryCmbBx" to determine what column and table to search.
+   * Uses "preparedStatement" to prevent SQL injection.
+   * Then inputs value received from "searchField" into SQL statement and executed statement.
+   * Result of statement saved in "resultSet" which is sent to "populateSearchResultsTable()"
+   * to print it in the TableView.
+   */
   @FXML
   private void search(ActionEvent event) {
     initializeDB();
@@ -356,37 +368,52 @@ public class Controller {
     try {
       String preparedStm = "";
       String searchFieldValue;
-      Boolean isAnimalTerm = false;
       PreparedStatement preparedStatement;
       ResultSet resultSet;
+
+      // Uses selected choice from searchCatgryCmbBx dropdown to select correct SQL
+      // "LIKE" selects data that contains the value being searched
+      // Ex: Search: "a" = Cat, Mad, Glad, Shade
+      // Case sensitive for the time being
       if (searchCatgryCmbBx.getValue().equals("Collar ID")) {
         preparedStm = "SELECT * FROM ANIMAL WHERE COLLAR_ID LIKE ?;";
-        isAnimalTerm = true;
       } else if (searchCatgryCmbBx.getValue().equals("Animal Name")) {
         preparedStm = "SELECT * FROM ANIMAL WHERE NAME LIKE ?";
-        isAnimalTerm = true;
       } else if (searchCatgryCmbBx.getValue().equals("Species")) {
         preparedStm = "SELECT * FROM ANIMAL WHERE SPECIES LIKE ?";
-        isAnimalTerm = true;
-      } else if (searchCatgryCmbBx.getValue().equals("Employee Num")) {
+      } else if (searchCatgryCmbBx.getValue().equals("Breed")) {
+        preparedStm = "SELECT * FROM ANIMAL WHERE BREED LIKE ?";
+      } else if (searchCatgryCmbBx.getValue().equals("Animal Age")) {
+        preparedStm = "SELECT * FROM ANIMAL WHERE AGE LIKE ?";
+      } else if (searchCatgryCmbBx.getValue().equals("Date Admitted")) {
+        preparedStm = "SELECT * FROM ANIMAL WHERE DATE_ADMITTED LIKE ?";
+      } else if (searchCatgryCmbBx.getValue().equals("Kennel Number")) {
+        preparedStm = "SELECT * FROM ANIMAL WHERE KENNEL_NUMBER LIKE ?";
+      } else if (searchCatgryCmbBx.getValue().equals("Employee Number")) {
         preparedStm = "SELECT * FROM EMPLOYEE WHERE EMPLOYEE_NUM LIKE ?";
-        isAnimalTerm = false;
-      } else if (searchCatgryCmbBx.getValue().equals("Emp First Name")) {
+      } else if (searchCatgryCmbBx.getValue().equals("Employee First Name")) {
         preparedStm = "SELECT * FROM EMPLOYEE WHERE FIRST_NAME LIKE ?";
-        isAnimalTerm = false;
-      } else if (searchCatgryCmbBx.getValue().equals("Emp Last Name")) {
+      } else if (searchCatgryCmbBx.getValue().equals("Employee Last Name")) {
         preparedStm = "SELECT * FROM EMPLOYEE WHERE LAST_NAME LIKE ?";
-        isAnimalTerm = false;
       } else if (searchCatgryCmbBx.getValue().equals("Job Class")) {
         preparedStm = "SELECT * FROM EMPLOYEE WHERE JOB_CLASS LIKE ?";
-        isAnimalTerm = false;
+      } else if (searchCatgryCmbBx.getValue().equals("Assigned Task")) {
+        preparedStm = "SELECT * FROM EMPLOYEE WHERE ASSIGNED_TASK LIKE ?";
+      } else if (searchCatgryCmbBx.getValue().equals("Phone Number")) {
+        preparedStm = "SELECT * FROM EMPLOYEE WHERE PHONE_NUMBER LIKE ?";
+      } else if (searchCatgryCmbBx.getValue().equals("Pay Rate")) {
+        preparedStm = "SELECT * FROM EMPLOYEE WHERE PAY_RATE LIKE ?";
+      } else if (searchCatgryCmbBx.getValue().equals("Username")) {
+        preparedStm = "SELECT * FROM EMPLOYEE WHERE USERNAME LIKE ?";
       }
-      searchFieldValue = searchField.getText();
-      preparedStatement = conn.prepareStatement(preparedStm);
-      preparedStatement.setString(1, "%" + searchFieldValue + "%");
-      resultSet = preparedStatement.executeQuery();
 
-      populateSearchResultsTable(resultSet);
+      searchFieldValue = searchField.getText(); // retrieves value from search text field
+      preparedStatement = conn.prepareStatement(preparedStm);
+      // Concatenates SQL statement chosen above and text to be searched
+      preparedStatement.setString(1, "%" + searchFieldValue + "%");
+      resultSet = preparedStatement.executeQuery(); // Executes SQL, saves results in resultSet
+
+      populateSearchResultsTable(resultSet); // prints results to TableView
 
     } catch (SQLException e) {
       e.printStackTrace();
@@ -394,32 +421,44 @@ public class Controller {
     closeDb();
   }
 
+  /**
+   * Retrieves names of columns in database table and uses it to name TableView columns.
+   * Receives values from resultSet and uses them to create a list matrix to populate TableView
+   */
   @FXML
   private void populateSearchResultsTable(ResultSet resultSet) {
+    searchResultTable.getItems().clear(); // Clears out data and columns before every search
+    searchResultTable.getColumns().clear();
+    // Stores data retrieved from search, held in resultSearch
     ObservableList<ObservableList> obsListResults = FXCollections.observableArrayList();
+
     try {
+      // Counts the number of columns and retrieves their names
       for (int i = 0; i < resultSet.getMetaData().getColumnCount(); i++) {
         final int j = i;
-        TableColumn col = new TableColumn(resultSet.getMetaData().getColumnName(i + 1));
-        col.setCellValueFactory(
+        // Sets database column name to TableView's column name
+        TableColumn column = new TableColumn(resultSet.getMetaData().getColumnName(i + 1));
+        column.setCellValueFactory(
             new Callback<CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
               public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {
                 return new SimpleStringProperty(param.getValue().get(j).toString());
               }
             });
-        searchResultTable.getColumns().addAll(col);
+        searchResultTable.getColumns().addAll(column); // adds created columns to TableView
       }
 
-      while (resultSet.next()) {
-        //Iterate Row
+      while (resultSet.next()) { // while resultSet has values
+        // Iterates through rows
+        // Two lists needed, one for holding values per row,
+        // other for holding list of lists of values per row (thus creating a sort of 2D array)
         ObservableList<String> row = FXCollections.observableArrayList();
         for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-          //Iterate Column
+          // sets values to list for that row
           row.add(resultSet.getString(i));
         }
         obsListResults.add(row);
       }
-
+      // Populates TableView using list of lists of values per row
       searchResultTable.setItems(obsListResults);
     } catch (SQLException e) {
       e.printStackTrace();
