@@ -213,13 +213,8 @@
                 <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="100.0"
                   vgrow="SOMETIMES"/>
               </rowConstraints>
-              <TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1"
-                GridPane.rowIndex="1">
-                <columns>
-                  <TableColumn prefWidth="75.0" text="C1"/>
-                  <TableColumn prefWidth="75.0" text="C2"/>
-                </columns>
-              </TableView>
+              <TableView fx:id="employeesTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1"
+                GridPane.rowIndex="1"/>
               <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
                 <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
@@ -240,7 +235,7 @@
                     <Font size="24.0"/>
                   </font>
                 </Button>
-                <Button mnemonicParsing="false" text="Remove"
+                <Button onAction="#removeFromEmployeesTable" mnemonicParsing="false" text="Remove"
                   GridPane.columnIndex="1">
                   <GridPane.margin>
                     <Insets left="20.0"/>

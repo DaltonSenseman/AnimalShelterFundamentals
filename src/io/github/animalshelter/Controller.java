@@ -104,8 +104,12 @@ public class Controller {
   private TableView currentAnimals = new TableView();
   //*********************************
 
+  //********* EMPLOYEE TAB **********
+  @FXML
+  private TableView<Employee> employeesTable = new TableView<>();
 
-  //********* ADD_EMPLOYEE_FX_ID******
+  private ObservableList<Employee> employees;
+
   @FXML
   private TextField employeeFirstName;
 
@@ -113,7 +117,7 @@ public class Controller {
   private TextField employeeLastName;
 
   @FXML
-  private TextField employeeNumber;
+  private TextField employeeAssignedTask;
 
   @FXML
   private ComboBox<String> jobTitle = new ComboBox<>();
@@ -166,7 +170,7 @@ public class Controller {
   @FXML
   private Button addEventBtn;
 
-  private ObservableList animalEvents;
+  private ObservableList<AnimalEvent> animalEvents;
 
   final ArrayList<Animal> arrOfAnimals = new ArrayList();
   ObservableList<Animal> pets;
@@ -214,6 +218,11 @@ public class Controller {
     eventTypeChoice.getItems().addAll("Vet Checkup", "Cleaning");
     setupEventsTable();
     populateEventsTable();
+
+    // Setup Employees Tab
+    jobTitle.getItems().addAll("Vet Tech", "Veterinarian", "Manager", "Janitor", "Accountant");
+    setupEmployeesTable();
+    populateEmployeesTable();
   }
 
   /**
@@ -480,6 +489,7 @@ public class Controller {
 
       preparedStatement.executeUpdate();
 
+      preparedStatement.close();
       populateEventsTable();
     } catch(SQLException e) {
       e.printStackTrace();
@@ -522,6 +532,67 @@ public class Controller {
     }
   }
 
+  public void setupEmployeesTable() {
+    TableColumn<Employee, Integer> employeeNum = new TableColumn<>("Employee Number");
+    employeeNum.setCellValueFactory(new PropertyValueFactory<>("employeeNum"));
+    TableColumn<Employee, String> employeeFirstName = new TableColumn<>("First Name");
+    employeeFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+    TableColumn<Employee, String> employeeLastName = new TableColumn<>("Last Name");
+    employeeLastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+    TableColumn<Employee, String> employeeJobClass = new TableColumn<>("Job Class");
+    employeeJobClass.setCellValueFactory(new PropertyValueFactory<>("jobClass"));
+    TableColumn<Employee, String> employeePhone = new TableColumn<>("Phone Number");
+    employeePhone.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+    TableColumn<Employee, Integer> employeePayRate = new TableColumn<>("Pay Rate");
+    employeePayRate.setCellValueFactory(new PropertyValueFactory<>("payRate"));
+    TableColumn<Employee, String> employeeHireDate = new TableColumn<>("Hire Date");
+    employeeHireDate.setCellValueFactory(new PropertyValueFactory<>("hireDate"));
+    TableColumn<Employee, String> employeeAssignedTask = new TableColumn<>("Assigned Task");
+    employeeAssignedTask.setCellValueFactory(new PropertyValueFactory<>("assignedTask"));
+
+
+    employeesTable.getColumns().addAll(employeeNum, employeeFirstName, employeeLastName, employeeJobClass, employeePhone, employeePayRate, employeeHireDate, employeeAssignedTask);
+
+    employees = FXCollections.observableArrayList();
+    employeesTable.setItems(employees);
+  }
+
+  public void populateEmployeesTable() {
+    initializeDB();
+
+    employees.clear();
+    try {
+      ResultSet resultSet;
+      String query = "SELECT * FROM EMPLOYEE";
+      resultSet = stmt.executeQuery(query);
+
+      int employeeNum;
+      String firstName;
+      String lastName;
+      String jobClass;
+      String phoneNumber;
+      int payRate;
+      String hireDate;
+      String assignedTask;
+
+      while (resultSet.next()) {
+        employeeNum = resultSet.getInt("EMPLOYEE_NUM");
+        firstName = resultSet.getString("FIRST_NAME");
+        lastName = resultSet.getString("LAST_NAME");
+        jobClass = resultSet.getString("JOB_CLASS");
+        phoneNumber = resultSet.getString("PHONE_NUMBER");
+        payRate = resultSet.getInt("PAY_RATE");
+        hireDate = resultSet.getString("HIRE_DATE");
+        assignedTask = resultSet.getString("ASSIGNED_TASK");
+
+        employees.add(new Employee(employeeNum, firstName, lastName, jobClass, phoneNumber, payRate, hireDate, assignedTask));
+      }
+
+    } catch(SQLException e) {
+      e.printStackTrace();
+    }
+    closeDb();
+  }
 
   @FXML
   public void openAddEmployeeDialog() {
@@ -536,32 +607,66 @@ public class Controller {
     }
   }
 
-   /*
-   *********WORK_IN_PROGRESS**********
+   /**********WORK_IN_PROGRESS**********/
   @FXML
-  public void addEmployee(ActionEvent event){
+  public void addEmployee() {
     //gathers input from Add Employee page
-    try{
-
+    initializeDB();
+    try {
       String addFirstName = employeeFirstName.getText();
       String addLastName = employeeLastName.getText();
-      String addEmployeeNum = employeeNumber.getText();
       String addJobTitle = jobTitle.getValue();
+      String addAssignedTask = employeeAssignedTask.getText();
       String addPhoneNumber = employeePhone.getText();
-      String addPayRate = payRate.getText();
+      int addPayRate = Integer.parseInt(payRate.getText());
       String addHireDate = hireDate.getValue().toString();
       String addUsername = empUsername.getText();
       String addPassword = empPassword.getText();
 
-     create prepared statement here
+      String preparedStm = "INSERT INTO EMPLOYEE( FIRST_NAME, LAST_NAME, JOB_CLASS, ASSIGNED_TASK, PHONE_NUMBER, PAY_RATE, HIRE_DATE, USERNAME, PASSWORD) VALUES (?,?,?,?,?,?,?,?,?);";
+      PreparedStatement preparedStatement = conn.prepareStatement(preparedStm);
 
-    }
-    catch (SQLException except){
-      except.printStackTrace();
-    }
+      preparedStatement.setString(1, addFirstName);
+      preparedStatement.setString(2, addLastName);
+      preparedStatement.setString(3, addJobTitle);
+      preparedStatement.setString(4, addAssignedTask);
+      preparedStatement.setString(5, addPhoneNumber);
+      preparedStatement.setInt(6, addPayRate);
+      preparedStatement.setString(7, addHireDate);
+      preparedStatement.setString(8, addUsername);
+      preparedStatement.setString(9, addPassword);
 
+      preparedStatement.executeUpdate();
+
+      preparedStatement.close();
+      populateEmployeesTable();
+    } catch(SQLException e) {
+      e.printStackTrace();
+    }
+    closeDb();
   }
-   */
+
+  public void removeFromEmployeesTable(ActionEvent actionEvent) {
+    initializeDB();
+    try {
+
+      Employee employeeToBeDeleted = (Employee) employeesTable.getSelectionModel().getSelectedItem();
+      int idToDelete = employeeToBeDeleted.getEmployeeNum();
+      String preparedStm = "DELETE FROM EMPLOYEE WHERE EMPLOYEE_NUM = ?;";
+
+      PreparedStatement preparedStatement = conn.prepareStatement(preparedStm);
+      preparedStatement.setInt(1, idToDelete);
+      preparedStatement.executeUpdate();
+
+      ObservableList<Employee> allEvents = employeesTable.getItems();
+      ObservableList<Employee> selectedEvents = employeesTable.getSelectionModel().getSelectedItems();
+      selectedEvents.forEach(allEvents::remove);
+
+    } catch(SQLException e) {
+      e.printStackTrace();
+    }
+    closeDb();
+  }
 
   public void initializeDB() {
     // Connection to the database
