@@ -1,6 +1,7 @@
 package io.github.animalshelter;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,11 +11,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -22,6 +26,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Region;
 import javafx.util.Callback;
 import javafx.stage.Stage;
 
@@ -160,6 +167,9 @@ public class Controller {
   private DatePicker eventDatePick;
 
   @FXML
+  private ChoiceBox<String> eventTimeChoice = new ChoiceBox<>();
+
+  @FXML
   private TextField animalNameField;
 
   @FXML
@@ -168,8 +178,8 @@ public class Controller {
   private ObservableList<AnimalEvent> animalEvents;
 
   final ArrayList<Animal> arrOfAnimals = new ArrayList();
-  ObservableList<Animal> pets;
 
+  private ObservableList<Animal> pets;
 
   public void initialize() {
     pets = FXCollections.observableList(arrOfAnimals);
@@ -209,8 +219,19 @@ public class Controller {
 
     populateTable();
 
+    currentAnimals.setOnMouseClicked(new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent mouseEvent) {
+         if (mouseEvent.getClickCount() == 2) {
+            openAnimalProfile();
+          }
+      }
+    });
+
     // Setup Events Tab
     eventTypeChoice.getItems().addAll("Vet Checkup", "Cleaning");
+    eventTimeChoice.getItems().addAll("8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00 noon", "12:30pm",
+        "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm");
     setupEventsTable();
     populateEventsTable();
 
@@ -218,6 +239,23 @@ public class Controller {
     jobTitle.getItems().addAll("Vet Tech", "Veterinarian", "Manager", "Janitor", "Accountant");
     setupEmployeesTable();
     populateEmployeesTable();
+  }
+
+  public void openAnimalProfile() {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("animalProfile.fxml"));
+      Parent root1 = (Parent) loader.load();
+
+      ProfileController profileController = loader.getController();
+      profileController.transferAnimal((Animal) currentAnimals.getSelectionModel().getSelectedItem());
+
+      Stage stage = new Stage();
+      stage.setScene(new Scene(root1));
+      stage.show();
+
+    } catch (IOException e) {
+      System.out.println("Could not open animal profile!");
+    }
   }
 
   /**
@@ -352,16 +390,19 @@ public class Controller {
       pets.clear();
       ResultSet rs = stmt.executeQuery(sql);
       while (rs.next()) {
-        String name = rs.getString("Name");
-        String animalSpecies = rs.getString("Species");
-        int animalCollarId = rs.getInt("Collar_ID");
+        int animalCollarId = rs.getInt("COLLAR_ID");
+        String name = rs.getString("NAME");
+        String animalSpecies = rs.getString("SPECIES");
         String tempBreed = rs.getString("BREED");
         int tempAge = rs.getInt("AGE");
         String tempDate = rs.getString("DATE_ADMITTED");
         int tempKennel = rs.getInt("KENNEL_NUMBER");
         String tempGender = rs.getString("GENDER");
+        boolean tempNeutered = rs.getBoolean("NEUTERED");
+        int tempWeight = rs.getInt("WEIGHT");
+        String tempSize = rs.getString("SIZE");
         Animal tableOfAnimals = new Animal(name, animalSpecies, tempBreed, tempAge, tempKennel,
-            tempGender, animalCollarId, tempDate);
+            tempGender, animalCollarId, tempDate, tempNeutered, tempWeight, tempSize);
         arrOfAnimals.add(tableOfAnimals);
       }
       pets = FXCollections.observableList(arrOfAnimals);
@@ -502,13 +543,14 @@ public class Controller {
       String eventType = eventTypeChoice.getValue();
       String animalName = animalNameField.getText();
       String eventDate = eventDatePick.getValue().toString();
+      String eventTime = eventTimeChoice.getValue().toString();
 
       String preparedStm = "INSERT INTO EVENTS( EVENT_TYPE, ANIMAL_NAME, EVENT_DATE) VALUES (?,?,?);";
       PreparedStatement preparedStatement = conn.prepareStatement(preparedStm);
 
       preparedStatement.setString(1, eventType);
       preparedStatement.setString(2, animalName);
-      preparedStatement.setString(3, eventDate);
+      preparedStatement.setString(3,  eventTime + " " + eventDate);
 
       preparedStatement.executeUpdate();
 
@@ -636,7 +678,6 @@ public class Controller {
     }
   }
 
-  /**********WORK_IN_PROGRESS**********/
   @FXML
   public void addEmployee() {
     //gathers input from Add Employee page
@@ -732,5 +773,8 @@ public class Controller {
     } catch (SQLException e) {
       e.printStackTrace();
     }
+  }
+
+  public void editAnimal(ActionEvent actionEvent) {
   }
 }

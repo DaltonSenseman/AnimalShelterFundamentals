@@ -21,6 +21,9 @@ public class Animal {
   private String animalGender;
   private int collarID;
   private String dateAdmitted;
+  private boolean neutered;
+  private int weight;
+  private String size;
 
   public Animal(String name, String species, int collarID) {
     this.name = name;
@@ -29,7 +32,7 @@ public class Animal {
   }
 
   public Animal(String name, String species, String breed, int age, int kennelNumber,
-      String animalGender, int collarID, String dateAdmitted) {
+      String animalGender, int collarID, String dateAdmitted, boolean neutered, int weight, String size) {
     this.name = name;
     this.species = species;
     this.breed = breed;
@@ -38,6 +41,9 @@ public class Animal {
     this.animalGender = animalGender;
     this.collarID = collarID;
     this.dateAdmitted = dateAdmitted;
+    this.neutered = neutered;
+    this.weight = weight;
+    this.size = size;
   }
 
   public String getBreed() {
@@ -104,4 +110,30 @@ public class Animal {
   public void setDateAdmitted(String dateAdmitted) {
     this.dateAdmitted = dateAdmitted;
   }
+
+
+  public boolean isNeutered() {
+    return neutered;
+  }
+
+  public void setNeutered(boolean neutered) {
+    this.neutered = neutered;
+  }
+
+  public int getWeight() {
+    return weight;
+  }
+
+  public void setWeight(int weight) {
+    this.weight = weight;
+  }
+
+  public String getSize() {
+    return size;
+  }
+
+  public void setSize(String size) {
+    this.size = size;
+  }
+
 }
