@@ -7,19 +7,19 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="426.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.animalshelter.Controller">
-  <Button fx:id="loginSubmitButton" layoutX="281.0" layoutY="267.0" mnemonicParsing="false" onAction="#onSubmitButtonClicked" prefHeight="32.0" prefWidth="73.0" text="Submit" />
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="426.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/8.0.221" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.animalshelter.Controller">
+  <Button id="login" fx:id="loginSubmitButton" layoutX="283.0" layoutY="285.0" mnemonicParsing="false" onAction="#onSubmitButtonClicked" prefHeight="32.0" prefWidth="73.0" text="Submit" underline="true" />
 
-  <Label id="welcome" layoutX="140.0" layoutY="34.0" text="Welcome">
+  <Label id="welcome" alignment="BASELINE_CENTER" prefHeight="98.0" prefWidth="426.0" text="Welcome">
     <font>
       <Font size="35.0" />
     </font>
   </Label>
-  <TextField fx:id="loginUserField" layoutX="145.0" layoutY="124.0" prefHeight="26.0" prefWidth="209.0" />
-  <Label layoutX="70.0" layoutY="128.0" text="Username:" />
+  <TextField fx:id="loginUserField" layoutX="147.0" layoutY="149.0" prefHeight="26.0" prefWidth="209.0" />
+  <Label layoutX="50.0" layoutY="153.0" text="Username:" />
 
-  <Label layoutX="70.0" layoutY="192.0" text="Password:" />
-  <PasswordField fx:id="loginPassField" layoutX="145.0" layoutY="188.0" onAction="#onEnter" prefHeight="26.0" prefWidth="210.0" />
+  <Label layoutX="50.0" layoutY="219.0" prefHeight="22.0" prefWidth="80.0" text="Password:" />
+  <PasswordField fx:id="loginPassField" layoutX="147.0" layoutY="215.0" onAction="#onEnter" prefHeight="26.0" prefWidth="210.0" />
 
   <Label fx:id="loginFailedLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="198.0" layoutY="308.0" />
 </Pane>

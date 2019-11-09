@@ -1,15 +1,15 @@
 .root {
-  -fx-background-color: #71C175;
+  -fx-background-color: linear-gradient(to right bottom, #8BC34A,#71C175 );
+
 }
 
 .label {
   -fx-background-color: #008799;
-  -fx-font-size: 12;
+  -fx-font-size: 16;
   -fx-font-family: Arial;
   -fx-text-fill: #FFFFFF;
-
-    -fx-border-color: #008799;
-  -fx-underline: false;
+  -fx-border-color: #008799;
+  -fx-effect: dropshadow(one-pass-box, black, 10, 0.0, 0,0);
 }
 
 .button {
@@ -17,10 +17,7 @@
   -fx-font-family: Arial;
   -fx-font-size: 13;
   -fx-background-color: #FFC107;
-  -fx-border-color: #FFFFFF;
-  -fx-border-width: 2;
-  -fx-border-radius: 2;
-  -fx-effect: dropshadow(one-pass-box, black, 8, 0.0, 2, 0);
+  -fx-effect: dropshadow(one-pass-box, black, 8, 0.0, 3, 2);
 }
 
 .text-field {
@@ -31,11 +28,12 @@
 }
 
 #welcome {
-  -fx-background-color: null;
-  -fx-border-color: null;
+  -fx-background-color: linear-gradient(#FFC107,  #ff8080);
+  -fx-border-color: #B2DFDB;
+  -fx-border-width: 5px;
   -fx-font: bold italic 42pt "Calibri";
   -fx-text-fill: #FFFFFF;
-  -fx-underline: true;
+  -fx-padding: 10px;
 }
 
 #loginFailedLabel{
@@ -45,3 +43,8 @@
     -fx-border-width: 0;
 }
 
+#login{
+    -fx-background-color: linear-gradient(#FFC107,  #ff8080);
+    -fx-font-family: Ariel;
+    -fx-text-fill:  #f2f2f2;
+}
