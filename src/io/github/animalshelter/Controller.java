@@ -181,6 +181,41 @@ public class Controller {
   private ObservableList<Animal> pets;
   //</editor-fold>
 
+  // Animal Profile Labels
+  @FXML
+  private Label animalProfileName;
+
+  @FXML
+  private Label animalProfileKennel;
+
+  @FXML
+  private Label animalProfileAge;
+
+  @FXML
+  private Label animalProfileDate;
+
+  @FXML
+  private Label animalProfileSpecies;
+
+  @FXML
+  private Label animalProfileBreed;
+
+  @FXML
+  private Label animalProfileSize;
+
+  @FXML
+  private Label animalProfileWeight;
+
+  @FXML
+  private Label animalProfileGender;
+
+  @FXML
+  private Label animalProfileNeutered;
+
+  @FXML
+  private Button closeAnimalProfileBtn;
+
+  private Animal selectedAnimal;
 
   public void initialize() {
     pets = FXCollections.observableList(arrOfAnimals);
@@ -228,18 +263,10 @@ public class Controller {
 
     populateTable();
 
-//    currentAnimals.setRowFactory(tv -> {
-//      TableRow<Animal> row = new TableRow<>();
-//      row.setOnMouseClicked(event -> {
-//        if (event.getClickCount() == 2 && (!row.isEmpty())){
-//          openAnimalProfile();
-//        }
-//      });
-//    };
 
     currentAnimals.setOnMouseClicked(mouseEvent -> {
       if (mouseEvent.getClickCount() == 2) {
-        openAnimalProfile();
+        openAnimalProfile((Animal) currentAnimals.getSelectionModel().getSelectedItem());
       }
     });
 
@@ -258,17 +285,29 @@ public class Controller {
     populateEmployeesTable();
   }
 
-  private void openAnimalProfile() {
+  private void openAnimalProfile(Animal selectedAnimal) {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("animalProfile.fxml"));
       Parent root1 = loader.load();
 
-      ProfileController profileController = loader.getController();
-      profileController.transferAnimal((Animal) currentAnimals.getSelectionModel().getSelectedItem());
+    //  ProfileController profileController = loader.getController();
+      //profileController.transferAnimal((Animal) currentAnimals.getSelectionModel().getSelectedItem());
+
+      animalProfileName.setText(selectedAnimal.getName());
+      animalProfileKennel.setText(String.valueOf(selectedAnimal.getKennelNumber()));
+      animalProfileAge.setText(String.valueOf(selectedAnimal.getAge()));
+      animalProfileDate.setText(selectedAnimal.getDateAdmitted());
+      animalProfileSpecies.setText(selectedAnimal.getSpecies());
+      animalProfileBreed.setText(selectedAnimal.getBreed());
+      animalProfileSize.setText(selectedAnimal.getSize());
+      animalProfileWeight.setText(String.valueOf(selectedAnimal.getWeight()));
+      animalProfileGender.setText(selectedAnimal.getAnimalGender());
+      animalProfileNeutered.setText(String.valueOf(selectedAnimal.isNeutered()));
 
       Stage stage = new Stage();
       stage.setScene(new Scene(root1));
       stage.show();
+
 
     } catch (IOException e) {
       System.out.println("Could not open animal profile!");
@@ -857,7 +896,14 @@ public class Controller {
     }
   }
 
-  public void editAnimal(ActionEvent actionEvent) {
+  public void editAnimalInfo(ActionEvent actionEvent) {
+
+  }
+
+  @FXML
+  public void closeAnimalProfile() {
+    Stage stage = (Stage) closeAnimalProfileBtn.getScene().getWindow();
+    stage.close();
   }
 }
 
