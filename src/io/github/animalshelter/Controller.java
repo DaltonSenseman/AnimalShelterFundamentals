@@ -41,7 +41,7 @@ import javafx.stage.Stage;
 public class Controller {
 
   Connection conn = null;
-  Statement stmt = null;
+  private Statement stmt = null;
 
   //<editor-fold desc="LOGIN_SCREEN_FX_ID">
   @FXML
