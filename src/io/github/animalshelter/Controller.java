@@ -1,24 +1,23 @@
 package io.github.animalshelter;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.ResourceBundle;
+import java.util.Properties;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -26,9 +25,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Region;
 import javafx.util.Callback;
 import javafx.stage.Stage;
 
@@ -41,12 +37,13 @@ import javafx.stage.Stage;
  * @author Tomas Vergara
  * @author William Ramanand
  */
+@SuppressWarnings("unchecked")
 public class Controller {
 
   Connection conn = null;
   Statement stmt = null;
 
-  //********* LOGIN_SCREEN_FX_ID*****
+  //<editor-fold desc="LOGIN_SCREEN_FX_ID">
   @FXML
   private Button loginSubmitButton;
 
@@ -58,10 +55,10 @@ public class Controller {
 
   @FXML
   private Label loginFailedLabel;
-  //*********************************
+  //</editor-fold>
 
 
-  //********* MISCELLANEOUS_FX_ID****
+  //<editor-fold desc="MISCELLANEOUS_FX_ID">
   @FXML
   private MenuBar menuBar;
 
@@ -75,10 +72,10 @@ public class Controller {
 
   @FXML
   private Button animalIDSearchButton;
-  //*********************************
+  //</editor-fold>
 
 
-  //********* ADD_ANIMAL_FX_ID*******
+  //<editor-fold desc="ADD_ANIMAL_FX_ID">
   @FXML
   private TextField animalName;
 
@@ -104,9 +101,10 @@ public class Controller {
 
   @FXML
   private TableView currentAnimals = new TableView();
-  //*********************************
+  //</editor-fold>
 
-  //********* EMPLOYEE TAB **********
+
+  //<editor-fold desc="EMPLOYEE TAB">
   @FXML
   private TableView<Employee> employeesTable = new TableView<>();
 
@@ -141,12 +139,13 @@ public class Controller {
 
   @FXML
   private Button addEmployeeBtn;
-  //**********************************
+  //</editor-fold>
 
 
-  // Search Function Declarations
+
+  //<editor-fold desc="Search Function Declarations">
   @FXML
-  private ComboBox<String> animalEmployeeCmbBx = new ComboBox<>();
+  private final ComboBox<String> animalEmployeeCmbBx = new ComboBox<>();
 
   @FXML
   private ComboBox<String> searchCatgryCmbBx = new ComboBox<>();
@@ -180,6 +179,8 @@ public class Controller {
   final ArrayList<Animal> arrOfAnimals = new ArrayList();
 
   private ObservableList<Animal> pets;
+  //</editor-fold>
+
 
   public void initialize() {
     pets = FXCollections.observableList(arrOfAnimals);
@@ -227,12 +228,18 @@ public class Controller {
 
     populateTable();
 
-    currentAnimals.setOnMouseClicked(new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent mouseEvent) {
-        if (mouseEvent.getClickCount() == 2) {
-          openAnimalProfile();
-        }
+//    currentAnimals.setRowFactory(tv -> {
+//      TableRow<Animal> row = new TableRow<>();
+//      row.setOnMouseClicked(event -> {
+//        if (event.getClickCount() == 2 && (!row.isEmpty())){
+//          openAnimalProfile();
+//        }
+//      });
+//    };
+
+    currentAnimals.setOnMouseClicked(mouseEvent -> {
+      if (mouseEvent.getClickCount() == 2) {
+        openAnimalProfile();
       }
     });
 
@@ -251,14 +258,13 @@ public class Controller {
     populateEmployeesTable();
   }
 
-  public void openAnimalProfile() {
+  private void openAnimalProfile() {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("animalProfile.fxml"));
-      Parent root1 = (Parent) loader.load();
+      Parent root1 = loader.load();
 
       ProfileController profileController = loader.getController();
-      profileController
-          .transferAnimal((Animal) currentAnimals.getSelectionModel().getSelectedItem());
+      profileController.transferAnimal((Animal) currentAnimals.getSelectionModel().getSelectedItem());
 
       Stage stage = new Stage();
       stage.setScene(new Scene(root1));
@@ -359,7 +365,7 @@ public class Controller {
   public void openAddAnimalDialog() {
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("animalAddPage.fxml"));
-      Parent root1 = (Parent) fxmlLoader.load();
+      Parent root1 = fxmlLoader.load();
       Stage stage = new Stage();
       stage.setScene(new Scene(root1));
       stage.showAndWait();
@@ -445,42 +451,61 @@ public class Controller {
       // "LIKE" selects data that contains the value being searched
       // Ex: Search: "a" = Cat, Mad, Glad, Shade
       // Case sensitive for the time being
-      if (searchCatgryCmbBx.getValue().equals("Collar ID")) {
-        preparedStm = "SELECT * FROM ANIMAL WHERE COLLAR_ID LIKE ?;";
-      } else if (searchCatgryCmbBx.getValue().equals("Animal Name")) {
-        preparedStm = "SELECT * FROM ANIMAL WHERE NAME LIKE ?";
-      } else if (searchCatgryCmbBx.getValue().equals("Species")) {
-        preparedStm = "SELECT * FROM ANIMAL WHERE SPECIES LIKE ?";
-      } else if (searchCatgryCmbBx.getValue().equals("Breed")) {
-        preparedStm = "SELECT * FROM ANIMAL WHERE BREED LIKE ?";
-      } else if (searchCatgryCmbBx.getValue().equals("Animal Age")) {
-        preparedStm = "SELECT * FROM ANIMAL WHERE AGE LIKE ?";
-      } else if (searchCatgryCmbBx.getValue().equals("Date Admitted")) {
-        preparedStm = "SELECT * FROM ANIMAL WHERE DATE_ADMITTED LIKE ?";
-      } else if (searchCatgryCmbBx.getValue().equals("Kennel Number")) {
-        preparedStm = "SELECT * FROM ANIMAL WHERE KENNEL_NUMBER LIKE ?";
-      } else if (searchCatgryCmbBx.getValue().equals("Weight")) {
-        preparedStm = "SELECT * FROM ANIMAL WHERE WEIGHT LIKE ?";
-      } else if (searchCatgryCmbBx.getValue().equals("Size")) {
-        preparedStm = "SELECT * FROM ANIMAL WHERE SIZE LIKE ?";
-      } else if (searchCatgryCmbBx.getValue().equals("Employee Number")) {
-        preparedStm = "SELECT * FROM EMPLOYEE WHERE EMPLOYEE_NUM LIKE ?";
-      } else if (searchCatgryCmbBx.getValue().equals("Employee First Name")) {
-        preparedStm = "SELECT * FROM EMPLOYEE WHERE FIRST_NAME LIKE ?";
-      } else if (searchCatgryCmbBx.getValue().equals("Employee Last Name")) {
-        preparedStm = "SELECT * FROM EMPLOYEE WHERE LAST_NAME LIKE ?";
-      } else if (searchCatgryCmbBx.getValue().equals("Job Class")) {
-        preparedStm = "SELECT * FROM EMPLOYEE WHERE JOB_CLASS LIKE ?";
-      } else if (searchCatgryCmbBx.getValue().equals("Assigned Task")) {
-        preparedStm = "SELECT * FROM EMPLOYEE WHERE ASSIGNED_TASK LIKE ?";
-      } else if (searchCatgryCmbBx.getValue().equals("Phone Number")) {
-        preparedStm = "SELECT * FROM EMPLOYEE WHERE PHONE_NUMBER LIKE ?";
-      } else if (searchCatgryCmbBx.getValue().equals("Pay Rate")) {
-        preparedStm = "SELECT * FROM EMPLOYEE WHERE PAY_RATE LIKE ?";
-      } else if (searchCatgryCmbBx.getValue().equals("Username")) {
-        preparedStm = "SELECT * FROM EMPLOYEE WHERE USERNAME LIKE ?";
-      } else if (searchCatgryCmbBx.getValue().equals("Hire Date")) {
-        preparedStm = "SELECT * FROM EMPLOYEE WHERE HIRE_DATE LIKE ?";
+      switch (searchCatgryCmbBx.getValue()) {
+        case "Collar ID":
+          preparedStm = "SELECT * FROM ANIMAL WHERE COLLAR_ID LIKE ?;";
+          break;
+        case "Animal Name":
+          preparedStm = "SELECT * FROM ANIMAL WHERE NAME LIKE ?";
+          break;
+        case "Species":
+          preparedStm = "SELECT * FROM ANIMAL WHERE SPECIES LIKE ?";
+          break;
+        case "Breed":
+          preparedStm = "SELECT * FROM ANIMAL WHERE BREED LIKE ?";
+          break;
+        case "Animal Age":
+          preparedStm = "SELECT * FROM ANIMAL WHERE AGE LIKE ?";
+          break;
+        case "Date Admitted":
+          preparedStm = "SELECT * FROM ANIMAL WHERE DATE_ADMITTED LIKE ?";
+          break;
+        case "Kennel Number":
+          preparedStm = "SELECT * FROM ANIMAL WHERE KENNEL_NUMBER LIKE ?";
+          break;
+        case "Weight":
+          preparedStm = "SELECT * FROM ANIMAL WHERE WEIGHT LIKE ?";
+          break;
+        case "Size":
+          preparedStm = "SELECT * FROM ANIMAL WHERE SIZE LIKE ?";
+          break;
+        case "Employee Number":
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE EMPLOYEE_NUM LIKE ?";
+          break;
+        case "Employee First Name":
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE FIRST_NAME LIKE ?";
+          break;
+        case "Employee Last Name":
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE LAST_NAME LIKE ?";
+          break;
+        case "Job Class":
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE JOB_CLASS LIKE ?";
+          break;
+        case "Assigned Task":
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE ASSIGNED_TASK LIKE ?";
+          break;
+        case "Phone Number":
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE PHONE_NUMBER LIKE ?";
+          break;
+        case "Pay Rate":
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE PAY_RATE LIKE ?";
+          break;
+        case "Username":
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE USERNAME LIKE ?";
+          break;
+        case "Hire Date":
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE HIRE_DATE LIKE ?";
+          break;
       }
 
       searchFieldValue = searchField.getText(); // retrieves value from search text field
@@ -515,11 +540,7 @@ public class Controller {
         // Sets database column name to TableView's column name
         TableColumn column = new TableColumn(resultSet.getMetaData().getColumnName(i + 1));
         column.setCellValueFactory(
-            new Callback<CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
-              public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {
-                return new SimpleStringProperty(param.getValue().get(j).toString());
-              }
-            });
+            (Callback<CellDataFeatures<ObservableList, String>, ObservableValue<String>>) param -> new SimpleStringProperty(param.getValue().get(j).toString()));
         searchResultTable.getColumns().addAll(column); // adds created columns to TableView
       }
 
@@ -617,7 +638,7 @@ public class Controller {
     initializeDB();
     try {
 
-      AnimalEvent eventToBeDeleted = (AnimalEvent) eventsTable.getSelectionModel()
+      AnimalEvent eventToBeDeleted = eventsTable.getSelectionModel()
           .getSelectedItem();
       int idToDelete = eventToBeDeleted.getCollarID();
       String preparedStm = "DELETE FROM EVENTS WHERE COLLAR_ID = ?;";
@@ -641,7 +662,7 @@ public class Controller {
   public void openSearchDialog() {
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("searchWindow.fxml"));
-      Parent root1 = (Parent) fxmlLoader.load();
+      Parent root1 = fxmlLoader.load();
       Stage stage = new Stage();
       stage.setScene(new Scene(root1));
       stage.show();
@@ -719,7 +740,7 @@ public class Controller {
   public void openAddEmployeeDialog() {
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("employeeAddPage.fxml"));
-      Parent root1 = (Parent) fxmlLoader.load();
+      Parent root1 = fxmlLoader.load();
       Stage stage = new Stage();
       stage.setScene(new Scene(root1));
       stage.showAndWait();
@@ -774,7 +795,7 @@ public class Controller {
     initializeDB();
     try {
 
-      Employee employeeToBeDeleted = (Employee) employeesTable.getSelectionModel()
+      Employee employeeToBeDeleted = employeesTable.getSelectionModel()
           .getSelectedItem();
       int idToDelete = employeeToBeDeleted.getEmployeeNum();
       String preparedStm = "DELETE FROM EMPLOYEE WHERE EMPLOYEE_NUM = ?;";
@@ -795,12 +816,22 @@ public class Controller {
   }
 
   public void initializeDB() {
+    Properties loginInfo = new Properties();
+    try (InputStream input = new FileInputStream("./res/data.properties")) {
+      loginInfo.load(input);
+
+    } catch (FileNotFoundException e) {
+      System.out.println("Properties File not found!");
+    } catch (IOException ex) {
+      System.out.println("IO exception occurred!");
+    }
+
     // Connection to the database
     // JDBC driver name and database URL
     final String Jdbc_Driver = "org.h2.Driver";
     final String Db_Url = "jdbc:h2:./res/data";
-    final String user = "";
-    final String pass = "";
+    final String user = loginInfo.getProperty("db.username");
+    final String pass = loginInfo.getProperty("db.password");
 
     try {
       Class.forName(Jdbc_Driver);
@@ -829,3 +860,4 @@ public class Controller {
   public void editAnimal(ActionEvent actionEvent) {
   }
 }
+

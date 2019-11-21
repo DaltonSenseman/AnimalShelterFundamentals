@@ -9,6 +9,7 @@ package io.github.animalshelter;
  * @author Tomas Vergara
  * @author William Ramanand
  */
+@SuppressWarnings("unused")
 public class Employee {
 
     private int employeeNum;

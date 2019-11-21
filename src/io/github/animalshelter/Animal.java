@@ -1,7 +1,5 @@
 package io.github.animalshelter;
 
-import java.util.Date;
-
 /**
  * The class allows the creation of animal objects
  *
@@ -11,6 +9,7 @@ import java.util.Date;
  * @author Tomas Vergara
  * @author William Ramanand
  */
+@SuppressWarnings("unused")
 public class Animal {
 
   private String name;

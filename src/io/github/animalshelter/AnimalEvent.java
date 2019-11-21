@@ -9,6 +9,7 @@ package io.github.animalshelter;
  * @author Tomas Vergara
  * @author William Ramanand
  */
+@SuppressWarnings("unused")
 public class AnimalEvent {
   private int collarID;
   private String animalName;
@@ -26,10 +27,12 @@ public class AnimalEvent {
     return collarID;
   }
 
+  @SuppressWarnings("unused")
   public void setEventID(int eventID) {
     this.collarID = collarID;
   }
 
+  @SuppressWarnings("unused")
   public String getAnimalName() {
     return animalName;
   }
@@ -46,6 +49,7 @@ public class AnimalEvent {
     this.animalName = animalName;
   }
 
+  @SuppressWarnings("unused")
   public void setEventType(String eventType) {
     this.eventType = eventType;
   }
