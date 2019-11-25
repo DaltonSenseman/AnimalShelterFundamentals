@@ -216,8 +216,12 @@ public class Controller {
   private Button closeAnimalProfileBtn;
 
   private Animal selectedAnimal;
+  private boolean hasBeenInitialized = false;
 
   public void initialize() {
+    if(hasBeenInitialized) {
+      return;
+    }
     pets = FXCollections.observableList(arrOfAnimals);
 
     // Search Page Initializations
@@ -265,6 +269,7 @@ public class Controller {
 
 
     currentAnimals.setOnMouseClicked(mouseEvent -> {
+      selectedAnimal = (Animal) currentAnimals.getSelectionModel().getSelectedItem();
       if (mouseEvent.getClickCount() == 2) {
         openAnimalProfile((Animal) currentAnimals.getSelectionModel().getSelectedItem());
       }
@@ -283,15 +288,18 @@ public class Controller {
     jobTitle.getItems().addAll("Vet Tech", "Veterinarian", "Manager", "Janitor", "Accountant");
     setupEmployeesTable();
     populateEmployeesTable();
+    hasBeenInitialized = true;
   }
 
   private void openAnimalProfile(Animal selectedAnimal) {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("animalProfile.fxml"));
+      loader.setController(this);
       Parent root1 = loader.load();
 
     //  ProfileController profileController = loader.getController();
       //profileController.transferAnimal((Animal) currentAnimals.getSelectionModel().getSelectedItem());
+
 
       animalProfileName.setText(selectedAnimal.getName());
       animalProfileKennel.setText(String.valueOf(selectedAnimal.getKennelNumber()));
@@ -313,6 +321,7 @@ public class Controller {
       System.out.println("Could not open animal profile!");
     }
   }
+
 
   /**
    * When the login scene submit button is clicked. Checks username and password fields to see if db
