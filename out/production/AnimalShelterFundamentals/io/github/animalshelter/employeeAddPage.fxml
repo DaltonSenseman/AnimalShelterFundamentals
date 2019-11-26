@@ -7,7 +7,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.Light.Distant?>
 <?import javafx.scene.effect.Lighting?>
 <?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.layout.BorderPane?>
@@ -23,13 +22,10 @@
             <Font size="24.0" />
          </font>
          <effect>
-            <Lighting diffuseConstant="1.47" specularConstant="0.97" specularExponent="26.51" surfaceScale="1.03">
+            <Lighting diffuseConstant="1.51" light="$null" specularConstant="1.76" specularExponent="32.09" surfaceScale="1.96">
                <bumpInput>
                   <Shadow />
                </bumpInput>
-               <light>
-                  <Light.Distant azimuth="291.98" elevation="53.37" />
-               </light>
             </Lighting>
          </effect>
       </Label>
@@ -55,56 +51,56 @@
          <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
          <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
        </rowConstraints>
-       <Label id="employeeLabels" alignment="CENTER" prefWidth="130.0" text="First Name" translateX="-10.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+       <Label id="employeeLabels" alignment="CENTER" prefWidth="130.0" text="First Name" translateX="1.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
          <GridPane.margin>
            <Insets right="10.0" />
          </GridPane.margin>
        </Label>
-       <Label id="employeeLabels" alignment="CENTER" text="Last Name" translateX="-10.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+       <Label id="employeeLabels" alignment="CENTER" text="Last Name" translateX="1.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
          <GridPane.margin>
            <Insets right="10.0" />
          </GridPane.margin>
        </Label>
-       <Label id="employeeLabels" alignment="CENTER" text="Employee Task" translateX="-10.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+       <Label id="employeeLabels" alignment="CENTER" text="Employee Task" translateX="1.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
          <GridPane.margin>
            <Insets right="10.0" />
          </GridPane.margin>
        </Label>
-       <Label id="employeeLabels" alignment="CENTER" text="Job Title / Class" translateX="-10.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+       <Label id="employeeLabels" alignment="CENTER" text="Job Title / Class" translateX="1.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
          <GridPane.margin>
            <Insets right="10.0" />
          </GridPane.margin>
        </Label>
-       <Label id="employeeLabels" alignment="CENTER" text="Phone Number" translateX="-10.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
+       <Label id="employeeLabels" alignment="CENTER" text="Phone Number" translateX="1.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
          <GridPane.margin>
            <Insets right="10.0" />
          </GridPane.margin>
        </Label>
-       <Label id="employeeLabels" alignment="CENTER" text="Hourly Pay Rate" translateX="-10.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
+       <Label id="employeeLabels" alignment="CENTER" text="Hourly Pay Rate" translateX="1.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
          <GridPane.margin>
            <Insets right="10.0" />
          </GridPane.margin>
        </Label>
-       <Label id="employeeLabels" alignment="CENTER" text="Hire Date" translateX="-10.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
+       <Label id="employeeLabels" alignment="CENTER" text="Hire Date" translateX="1.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
          <GridPane.margin>
            <Insets right="10.0" />
          </GridPane.margin>
        </Label>
-       <TextField fx:id="employeeFirstName" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-       <TextField fx:id="employeeLastName" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-       <TextField fx:id="employeeAssignedTask" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-       <ComboBox id="animalCombo" fx:id="jobTitle" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-       <TextField fx:id="employeePhone" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-       <TextField fx:id="payRate" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-       <DatePicker fx:id="hireDate" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-       <TextField fx:id="empUsername" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-       <Label id="employeeLabels" alignment="CENTER" text="User Name" translateX="-10.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="8">
+       <TextField fx:id="employeeFirstName" alignment="CENTER" maxWidth="150.0" translateX="50.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+       <TextField fx:id="employeeLastName" maxWidth="150.0" translateX="50.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+       <TextField fx:id="employeeAssignedTask" maxWidth="150.0" translateX="50.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+       <ComboBox id="animalCombo" fx:id="jobTitle" prefWidth="150.0" translateX="50.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+       <TextField fx:id="employeePhone" maxWidth="150.0" translateX="50.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+       <TextField fx:id="payRate" maxWidth="150.0" translateX="50.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+       <DatePicker fx:id="hireDate" maxWidth="150.0" translateX="50.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+       <TextField fx:id="empUsername" maxWidth="150.0" translateX="50.0" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+       <Label id="employeeLabels" alignment="CENTER" text="User Name" translateX="1.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="8">
          <GridPane.margin>
            <Insets right="10.0" />
          </GridPane.margin>
        </Label>
-       <PasswordField fx:id="empPassword" GridPane.columnIndex="2" GridPane.rowIndex="9" />
-       <Label id="employeeLabels" alignment="CENTER" text="Password" translateX="-10.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9">
+       <PasswordField fx:id="empPassword" maxWidth="150.0" translateX="50.0" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+       <Label id="employeeLabels" alignment="CENTER" text="Password" translateX="1.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9">
          <GridPane.margin>
            <Insets right="10.0" />
          </GridPane.margin>

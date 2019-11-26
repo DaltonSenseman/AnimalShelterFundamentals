@@ -6,7 +6,6 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.Light.Distant?>
 <?import javafx.scene.effect.Lighting?>
 <?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.layout.BorderPane?>
@@ -71,7 +70,7 @@
            <Insets right="10.0" />
          </GridPane.margin>
        </Label>
-       <CheckBox id="animalCombo" fx:id="neuteredCheckBox" mnemonicParsing="false" prefHeight="19.0" prefWidth="19.0" scaleX="1.5" scaleY="1.5" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="9">
+       <CheckBox id="animalCombo" fx:id="neuteredCheckBox" mnemonicParsing="false" prefHeight="19.0" prefWidth="19.0" scaleX="1.5" scaleY="1.5" translateX="20.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="9">
          <GridPane.margin>
            <Insets left="10.0" />
          </GridPane.margin>
@@ -81,11 +80,11 @@
            <Insets right="10.0" />
          </padding>
        </Label>
-       <TextField fx:id="animalName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-       <TextField fx:id="breed" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-       <ComboBox id="animalCombo" fx:id="animalGender" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-       <ComboBox id="animalCombo" fx:id="animalSize" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-       <TextField fx:id="animalWeight" GridPane.columnIndex="1" GridPane.rowIndex="8">
+       <TextField fx:id="animalName" maxWidth="150.0" translateX="20.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+       <TextField fx:id="breed" maxWidth="150.0" translateX="20.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+       <ComboBox id="animalCombo" fx:id="animalGender" prefWidth="150.0" translateX="20.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+       <ComboBox id="animalCombo" fx:id="animalSize" prefWidth="150.0" translateX="20.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+       <TextField fx:id="animalWeight" maxWidth="150.0" translateX="20.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
          <GridPane.margin>
            <Insets />
          </GridPane.margin>
@@ -95,26 +94,23 @@
            <Font size="14.0" />
          </font>
        </Button>
-         <TextField fx:id="animalAge" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         <TextField fx:id="animalAge" maxWidth="150.0" translateX="20.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          <Label id="animalLabels" alignment="CENTER" text="Age" translateX="-10.0" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
             <GridPane.margin>
                <Insets right="10.0" />
             </GridPane.margin>
          </Label>
-         <ComboBox id="animalCombo" fx:id="kennelNumber" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-         <TextField fx:id="species" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+         <ComboBox id="animalCombo" fx:id="kennelNumber" prefWidth="150.0" translateX="20.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         <TextField fx:id="species" maxWidth="150.0" translateX="20.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          <Label id="addAnimalTitle" alignment="CENTER" contentDisplay="CENTER" prefHeight="42.0" prefWidth="233.0" text="Add Animal" textAlignment="JUSTIFY" translateX="10.0" GridPane.columnIndex="1">
             <font>
                <Font size="24.0" />
             </font>
             <effect>
-               <Lighting diffuseConstant="1.47" specularConstant="0.97" specularExponent="26.51" surfaceScale="1.03">
+               <Lighting diffuseConstant="1.51" light="$null" specularConstant="1.76" specularExponent="32.09" surfaceScale="1.96">
                   <bumpInput>
                      <Shadow />
                   </bumpInput>
-                  <light>
-                     <Light.Distant azimuth="291.98" elevation="53.37" />
-                  </light>
                </Lighting>
             </effect>
          </Label>
