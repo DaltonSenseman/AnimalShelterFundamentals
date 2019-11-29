@@ -142,7 +142,6 @@ public class Controller {
   //</editor-fold>
 
 
-
   //<editor-fold desc="Search Function Declarations">
   @FXML
   private final ComboBox<String> animalEmployeeCmbBx = new ComboBox<>();
@@ -215,11 +214,47 @@ public class Controller {
   @FXML
   private Button closeAnimalProfileBtn;
 
-  private Animal selectedAnimal;
+  // Edit Animal
+  @FXML
+  private TextField editAnimalName;
+
+  @FXML
+  private TextField editAnimalKennel;
+
+  @FXML
+  private TextField editAnimalAge;
+
+  @FXML
+  private Label editAnimalDate;
+
+  @FXML
+  private TextField editAnimalSpecies;
+
+  @FXML
+  private TextField editAnimalBreed;
+
+  @FXML
+  private TextField editAnimalWeight;
+
+  @FXML
+  private TextField editAnimalGender;
+
+  @FXML
+  private CheckBox editAnimalNeutered;
+
+  @FXML
+  private ChoiceBox<String> editAnimalSize = new ChoiceBox();
+
+  @FXML
+  private Button saveAnimalProfile;
+
+
   private boolean hasBeenInitialized = false;
 
+  private Animal selectedAnimal;
+
   public void initialize() {
-    if(hasBeenInitialized) {
+    if (hasBeenInitialized) {
       return;
     }
     pets = FXCollections.observableList(arrOfAnimals);
@@ -269,7 +304,6 @@ public class Controller {
 
     populateTable();
 
-
     currentAnimals.setOnMouseClicked(mouseEvent -> {
       selectedAnimal = (Animal) currentAnimals.getSelectionModel().getSelectedItem();
       if (mouseEvent.getClickCount() == 2) {
@@ -298,10 +332,6 @@ public class Controller {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("animalProfile.fxml"));
       loader.setController(this);
       Parent root1 = loader.load();
-
-    //  ProfileController profileController = loader.getController();
-      //profileController.transferAnimal((Animal) currentAnimals.getSelectionModel().getSelectedItem());
-
 
       animalProfileName.setText(selectedAnimal.getName());
       animalProfileKennel.setText(String.valueOf(selectedAnimal.getKennelNumber()));
@@ -481,6 +511,7 @@ public class Controller {
   }
 
   //********* SEARCH PAGE FUNCTIONS ***************************************************************
+
   /**
    * Receives input from "searchCatgryCmbBx" to determine what column and table to search. Uses
    * "preparedStatement" to prevent SQL injection. Then inputs value received from "searchField"
@@ -590,7 +621,8 @@ public class Controller {
         // Sets database column name to TableView's column name
         TableColumn column = new TableColumn(resultSet.getMetaData().getColumnName(i + 1));
         column.setCellValueFactory(
-            (Callback<CellDataFeatures<ObservableList, String>, ObservableValue<String>>) param -> new SimpleStringProperty(param.getValue().get(j).toString()));
+            (Callback<CellDataFeatures<ObservableList, String>, ObservableValue<String>>) param -> new SimpleStringProperty(
+                param.getValue().get(j).toString()));
         searchResultTable.getColumns().addAll(column); // adds created columns to TableView
       }
 
@@ -907,14 +939,83 @@ public class Controller {
     }
   }
 
-  public void editAnimalInfo(ActionEvent actionEvent) {
+  @FXML
+  public void editAnimalInfo() {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("editAnimalProfile.fxml"));
+      loader.setController(this);
+      Parent root1 = loader.load();
 
+      editAnimalName.setText(selectedAnimal.getName());
+      editAnimalKennel.setText(String.valueOf(selectedAnimal.getKennelNumber()));
+      editAnimalAge.setText(String.valueOf(selectedAnimal.getAge()));
+      editAnimalDate.setText(selectedAnimal.getDateAdmitted());
+      editAnimalSpecies.setText(selectedAnimal.getSpecies());
+      editAnimalBreed.setText(selectedAnimal.getBreed());
+      editAnimalSize.setValue(selectedAnimal.getSize());
+      editAnimalSize.getItems().addAll("Small", "Medium", "Large");
+      editAnimalWeight.setText(String.valueOf(selectedAnimal.getWeight()));
+      editAnimalGender.setText(selectedAnimal.getAnimalGender());
+      if (selectedAnimal.isNeutered()) {
+        editAnimalNeutered.setSelected(true);
+      }
+
+      Stage stage = new Stage();
+      stage.setScene(new Scene(root1));
+      stage.showAndWait();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   @FXML
-  public void closeAnimalProfile() {
-    Stage stage = (Stage) closeAnimalProfileBtn.getScene().getWindow();
-    stage.close();
+  public void saveAnimalEdit() {
+    initializeDB();
+    try {
+      // Obtains the input from the text fields
+      int animalId = selectedAnimal.getCollarID();
+      String newAnimalName = editAnimalName.getText();
+      String newAnimalAge = editAnimalAge.getText();
+      String newAnimalBreed = editAnimalBreed.getText();
+      String newAnimalGender = editAnimalGender.getText();
+      String newSize = editAnimalSize.getValue();
+      int newWeight = Integer.parseInt(editAnimalWeight.getText());
+      boolean isAnimalNeutered = editAnimalNeutered.isSelected();
+      String newSpecies = editAnimalSpecies.getText();
+      int newKennelLocation = Integer.parseInt(editAnimalKennel.getText());
+
+      String preparedStm = "UPDATE ANIMAL SET NAME=?, SPECIES=?, BREED=?, AGE=?, KENNEL_NUMBER=?, GENDER=?, NEUTERED=?, WEIGHT=?, SIZE=? WHERE COLLAR_ID=? ";
+      PreparedStatement preparedStatement = conn.prepareStatement(preparedStm);
+      preparedStatement.setString(1, newAnimalName);
+      preparedStatement.setString(2, newSpecies);
+      preparedStatement.setString(3, newAnimalBreed);
+      preparedStatement.setInt(4, Integer.parseInt(newAnimalAge));
+      preparedStatement.setInt(5, newKennelLocation);
+      preparedStatement.setString(6, newAnimalGender);
+      preparedStatement.setBoolean(7, isAnimalNeutered);
+      preparedStatement.setInt(8, newWeight);
+      preparedStatement.setString(9, newSize);
+      preparedStatement.setInt(10, animalId);
+      preparedStatement.executeUpdate();
+
+      populateTable();
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+
+    } finally {
+      Stage stage = (Stage) saveAnimalProfile.getScene().getWindow();
+      stage.close();
+      stage = (Stage) closeAnimalProfileBtn.getScene().getWindow();
+      stage.close();
+      closeDb();
+    }
   }
+
+    @FXML
+    public void closeAnimalProfile () {
+      Stage stage = (Stage) closeAnimalProfileBtn.getScene().getWindow();
+      stage.close();
+    }
 }
 

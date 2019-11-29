@@ -65,7 +65,7 @@
        <Label id="animalDescriptions" fx:id="animalProfileWeight" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="120.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
        <Label id="animalDescriptions" fx:id="animalProfileGender" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="120.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
        <Label id="animalDescriptions" fx:id="animalProfileNeutered" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="120.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-       <Button id="mainGuiButtons" alignment="CENTER" mnemonicParsing="false" prefHeight="44.0" prefWidth="92.0" text="Edit" GridPane.columnIndex="1" GridPane.rowIndex="6">
+       <Button onAction="#editAnimalInfo" id="mainGuiButtons" alignment="CENTER" mnemonicParsing="false" prefHeight="44.0" prefWidth="92.0" text="Edit" GridPane.columnIndex="1" GridPane.rowIndex="6">
          <font>
            <Font size="14.0" />
          </font>
