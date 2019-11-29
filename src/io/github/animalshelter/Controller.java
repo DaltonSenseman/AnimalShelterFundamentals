@@ -160,13 +160,13 @@ public class Controller {
   private TableView<AnimalEvent> eventsTable = new TableView();
 
   @FXML
-  private ChoiceBox<String> eventTypeChoice = new ChoiceBox<>();
+  private ComboBox<String> eventTypeChoice = new ComboBox<>();
 
   @FXML
   private DatePicker eventDatePick;
 
   @FXML
-  private ChoiceBox<String> eventTimeChoice = new ChoiceBox<>();
+  private ComboBox<String> eventTimeChoice = new ComboBox<>();
 
   @FXML
   private TextField animalNameField;

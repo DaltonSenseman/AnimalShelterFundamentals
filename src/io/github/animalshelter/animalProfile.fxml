@@ -3,13 +3,15 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="645.0" prefWidth="1004.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="645.0" prefWidth="1004.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/8.0.221" xmlns:fx="http://javafx.com/fxml/1">
    <center>
      <GridPane prefHeight="435.0" prefWidth="636.0" BorderPane.alignment="CENTER">
        <columnConstraints>
@@ -28,40 +30,47 @@
          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
        </rowConstraints>
-       <Label text="Animal Profile" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+       <Label id="animalProfile" alignment="CENTER" prefHeight="47.0" prefWidth="226.0" text="Animal Profile" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="TOP">
          <GridPane.margin>
            <Insets top="25.0" />
          </GridPane.margin>
          <font>
            <Font size="24.0" />
          </font>
+            <effect>
+               <Lighting diffuseConstant="1.51" light="$null" specularConstant="1.77" specularExponent="32.09" surfaceScale="1.97">
+                  <bumpInput>
+                     <Shadow />
+                  </bumpInput>
+               </Lighting>
+            </effect>
        </Label>
-       <Label text="Name" GridPane.rowIndex="1" />
-       <Label text="Kennel Number" GridPane.rowIndex="2" />
-       <Label text="Age" GridPane.rowIndex="3" />
-       <Label text="Date Admitted" GridPane.rowIndex="4" />
-       <Label text="Species" GridPane.rowIndex="5" />
-       <Label text="Breed" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-       <Label text="Gender" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-       <Label text="Size" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-       <Label text="Weight" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-       <Label text="Neutered/Spayed" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-       <Label fx:id="animalProfileName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-       <Label fx:id="animalProfileKennel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-       <Label fx:id="animalProfileAge" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-       <Label fx:id="animalProfileDate" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-       <Label fx:id="animalProfileSpecies" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-       <Label fx:id="animalProfileBreed" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-       <Label fx:id="animalProfileSize" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-       <Label fx:id="animalProfileWeight" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-       <Label fx:id="animalProfileGender" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-       <Label fx:id="animalProfileNeutered" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-       <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="92.0" text="Edit" GridPane.rowIndex="6">
+       <Label id="profileLabels" alignment="CENTER" text="Name" GridPane.rowIndex="1" />
+       <Label id="profileLabels" alignment="CENTER" text="Kennel Number" GridPane.rowIndex="2" />
+       <Label id="profileLabels" alignment="CENTER" text="Age" GridPane.rowIndex="3" />
+       <Label id="profileLabels" alignment="CENTER" text="Date Admitted" GridPane.rowIndex="4" />
+       <Label id="profileLabels" alignment="CENTER" text="Species" GridPane.rowIndex="5" />
+       <Label id="profileLabels" alignment="CENTER" text="Breed" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+       <Label id="profileLabels" alignment="CENTER" text="Gender" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+       <Label id="profileLabels" alignment="CENTER" text="Size" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+       <Label id="profileLabels" alignment="CENTER" text="Weight" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+       <Label id="profileLabels" alignment="CENTER" text="Neutered/Spayed" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+       <Label id="animalDescriptions" fx:id="animalProfileName" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+       <Label id="animalDescriptions" fx:id="animalProfileKennel" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+       <Label id="animalDescriptions" fx:id="animalProfileAge" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+       <Label id="animalDescriptions" fx:id="animalProfileDate" alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minHeight="20.0" minWidth="120.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+       <Label id="animalDescriptions" fx:id="animalProfileSpecies" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+       <Label id="animalDescriptions" fx:id="animalProfileBreed" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="120.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+       <Label id="animalDescriptions" fx:id="animalProfileSize" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="120.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+       <Label id="animalDescriptions" fx:id="animalProfileWeight" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="120.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+       <Label id="animalDescriptions" fx:id="animalProfileGender" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="120.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+       <Label id="animalDescriptions" fx:id="animalProfileNeutered" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="120.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+       <Button id="mainGuiButtons" alignment="CENTER" mnemonicParsing="false" prefHeight="44.0" prefWidth="92.0" text="Edit" GridPane.columnIndex="1" GridPane.rowIndex="6">
          <font>
            <Font size="14.0" />
          </font>
        </Button>
-       <Button fx:id="closeAnimalProfileBtn" mnemonicParsing="false" onAction="#closeAnimalProfile" prefHeight="44.0" prefWidth="92.0" text="Close" GridPane.columnIndex="4" GridPane.rowIndex="6">
+       <Button id="mainGuiButtons" fx:id="closeAnimalProfileBtn" alignment="CENTER" mnemonicParsing="false" onAction="#closeAnimalProfile" prefHeight="44.0" prefWidth="92.0" text="Close" GridPane.columnIndex="3" GridPane.rowIndex="6">
          <font>
            <Font size="14.0" />
          </font>

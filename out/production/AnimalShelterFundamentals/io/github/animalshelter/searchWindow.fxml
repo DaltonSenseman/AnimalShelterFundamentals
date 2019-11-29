@@ -1,64 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-  prefHeight="480.0" prefWidth="720.0" xmlns:fx="http://javafx.com/fxml/1"
-  xmlns="http://javafx.com/javafx/8" fx:controller="io.github.animalshelter.Controller">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="720.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/8.0.221" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.animalshelter.Controller">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
   <GridPane>
     <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="500.0" minWidth="10.0" prefWidth="10.0"/>
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="100.0"/>
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="47.0" prefWidth="150.0"/>
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="1.0" prefWidth="1.0"/>
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="500.0" minWidth="10.0" prefWidth="10.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="47.0" prefWidth="150.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="1.0" prefWidth="1.0" />
     </columnConstraints>
     <rowConstraints>
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-      <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-      <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-      <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-      <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
-    <Label text="Search" GridPane.columnIndex="2" GridPane.halignment="LEFT"
-      GridPane.rowIndex="1">
+    <Label id="searchLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="47.0" prefWidth="181.0" text="Search" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1">
       <font>
-        <Font size="24.0"/>
+        <Font size="24.0" />
       </font>
+         <effect>
+            <Lighting diffuseConstant="1.63" light="$null" specularConstant="1.26" specularExponent="31.16" surfaceScale="1.62">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+            </Lighting>
+         </effect>
     </Label>
-    <ComboBox fx:id="searchCatgryCmbBx" maxHeight="30.0" prefWidth="150.0" promptText="Search by:" GridPane.columnIndex="1"
-      GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+    <ComboBox id="searchCombo" fx:id="searchCatgryCmbBx" maxHeight="30.0" prefWidth="150.0" promptText="Search by:" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
       <GridPane.margin>
-        <Insets right="10.0"/>
+        <Insets right="10.0" />
       </GridPane.margin>
     </ComboBox>
-    <TextField fx:id="searchField" maxHeight="30.0" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
-    <Button onAction="#search" mnemonicParsing="false" text="Search" GridPane.columnIndex="2" GridPane.rowIndex="4">
+    <TextField fx:id="searchField" maxHeight="30.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+    <Button id="mainGuiButtons" mnemonicParsing="false" onAction="#search" prefHeight="35.0" prefWidth="100.0" text="Search" translateX="20.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
       <font>
-        <Font size="18.0"/>
+        <Font size="18.0" />
       </font>
     </Button>
   </GridPane>
   <GridPane GridPane.columnIndex="1">
     <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     </columnConstraints>
     <rowConstraints>
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <TableView fx:id="searchResultTable" prefHeight="200.0" prefWidth="200.0">
       <GridPane.margin>
-        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
       </GridPane.margin>
     </TableView>
   </GridPane>
