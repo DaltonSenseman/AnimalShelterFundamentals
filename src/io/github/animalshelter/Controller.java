@@ -228,13 +228,15 @@ public class Controller {
     // Didn't add Gender or Neutered since binary values and can be "searched" using TableView
     // Didn't add password either because that should be private
     animalEmployeeCmbBx.getItems().addAll("Animal", "Employee");
-    searchCatgryCmbBx.getItems() // Sets choices for dropdown in Search page
+    // Sets choices for dropdown in Search page
+    searchCatgryCmbBx.getItems()
         .addAll("Collar ID", "Animal Name", "Species", "Breed", "Animal Age",
             "Date Admitted", "Kennel Number", "Weight", "Size", "Employee Number",
             "Employee First Name",
             "Employee Last Name", "Job Class", "Assigned Task", "Phone Number", "Pay Rate",
             "Hire Date", "Username");
-    searchCatgryCmbBx.getSelectionModel().selectFirst(); // Sets default choice in dropdown
+    // Sets default choice in search dropdown
+    searchCatgryCmbBx.getSelectionModel().selectFirst();
 
     animalGender.getItems().addAll("Male", "Female");
     animalGender.setEditable(false);
@@ -504,19 +506,19 @@ public class Controller {
           preparedStm = "SELECT * FROM ANIMAL WHERE COLLAR_ID LIKE ?;";
           break;
         case "Animal Name":
-          preparedStm = "SELECT * FROM ANIMAL WHERE NAME LIKE ?";
+          preparedStm = "SELECT * FROM ANIMAL WHERE UPPER(NAME) LIKE ?";
           break;
         case "Species":
-          preparedStm = "SELECT * FROM ANIMAL WHERE SPECIES LIKE ?";
+          preparedStm = "SELECT * FROM ANIMAL WHERE UPPER(SPECIES) LIKE ?";
           break;
         case "Breed":
-          preparedStm = "SELECT * FROM ANIMAL WHERE BREED LIKE ?";
+          preparedStm = "SELECT * FROM ANIMAL WHERE UPPER(BREED) LIKE ?";
           break;
         case "Animal Age":
           preparedStm = "SELECT * FROM ANIMAL WHERE AGE LIKE ?";
           break;
         case "Date Admitted":
-          preparedStm = "SELECT * FROM ANIMAL WHERE DATE_ADMITTED LIKE ?";
+          preparedStm = "SELECT * FROM ANIMAL WHERE UPPER(DATE_ADMITTED) LIKE ?";
           break;
         case "Kennel Number":
           preparedStm = "SELECT * FROM ANIMAL WHERE KENNEL_NUMBER LIKE ?";
@@ -525,22 +527,22 @@ public class Controller {
           preparedStm = "SELECT * FROM ANIMAL WHERE WEIGHT LIKE ?";
           break;
         case "Size":
-          preparedStm = "SELECT * FROM ANIMAL WHERE SIZE LIKE ?";
+          preparedStm = "SELECT * FROM ANIMAL WHERE UPPER(SIZE) LIKE ?";
           break;
         case "Employee Number":
           preparedStm = "SELECT * FROM EMPLOYEE WHERE EMPLOYEE_NUM LIKE ?";
           break;
         case "Employee First Name":
-          preparedStm = "SELECT * FROM EMPLOYEE WHERE FIRST_NAME LIKE ?";
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE UPPER(FIRST_NAME) LIKE ?";
           break;
         case "Employee Last Name":
-          preparedStm = "SELECT * FROM EMPLOYEE WHERE LAST_NAME LIKE ?";
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE UPPER(LAST_NAME) LIKE ?";
           break;
         case "Job Class":
-          preparedStm = "SELECT * FROM EMPLOYEE WHERE JOB_CLASS LIKE ?";
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE UPPER(JOB_CLASS) LIKE ?";
           break;
         case "Assigned Task":
-          preparedStm = "SELECT * FROM EMPLOYEE WHERE ASSIGNED_TASK LIKE ?";
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE UPPER(ASSIGNED_TASK) LIKE ?";
           break;
         case "Phone Number":
           preparedStm = "SELECT * FROM EMPLOYEE WHERE PHONE_NUMBER LIKE ?";
@@ -549,7 +551,7 @@ public class Controller {
           preparedStm = "SELECT * FROM EMPLOYEE WHERE PAY_RATE LIKE ?";
           break;
         case "Username":
-          preparedStm = "SELECT * FROM EMPLOYEE WHERE USERNAME LIKE ?";
+          preparedStm = "SELECT * FROM EMPLOYEE WHERE UPPER(USERNAME) LIKE ?";
           break;
         case "Hire Date":
           preparedStm = "SELECT * FROM EMPLOYEE WHERE HIRE_DATE LIKE ?";
@@ -559,7 +561,7 @@ public class Controller {
       searchFieldValue = searchField.getText(); // retrieves value from search text field
       preparedStatement = conn.prepareStatement(preparedStm);
       // Concatenates SQL statement chosen above and text to be searched
-      preparedStatement.setString(1, "%" + searchFieldValue + "%");
+      preparedStatement.setString(1, "%" + searchFieldValue.toUpperCase() + "%");
       resultSet = preparedStatement.executeQuery(); // Executes SQL, saves results in resultSet
 
       populateSearchResultsTable(resultSet); // prints results to TableView
