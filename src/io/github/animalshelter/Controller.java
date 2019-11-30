@@ -243,7 +243,7 @@ public class Controller {
   private CheckBox editAnimalNeutered;
 
   @FXML
-  private ChoiceBox<String> editAnimalSize = new ChoiceBox();
+  private ComboBox<String> editAnimalSize = new ComboBox();
 
   @FXML
   private Button saveAnimalProfile;
