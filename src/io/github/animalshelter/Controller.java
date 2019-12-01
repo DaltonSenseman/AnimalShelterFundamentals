@@ -891,6 +891,7 @@ public class Controller {
       PreparedStatement preparedStatement = conn.prepareStatement(preparedStm);
       preparedStatement.setInt(1, selectedEmployeeID);
       preparedStatement.executeUpdate();
+      populateEmployeesTable();
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -914,6 +915,7 @@ public class Controller {
       preparedStatement.setString(1, newTask);
       preparedStatement.setInt(2, selectedEmployeeID);
       preparedStatement.executeUpdate();
+      populateEmployeesTable();
     } catch (SQLException e) {
       e.printStackTrace();
     }
