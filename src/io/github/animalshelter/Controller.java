@@ -171,6 +171,9 @@ public class Controller {
   private TextField animalNameField;
 
   @FXML
+  private TextField newTaskField;
+
+  @FXML
   private Button addEventBtn;
 
   private ObservableList<AnimalEvent> animalEvents;
@@ -873,6 +876,50 @@ public class Controller {
 
   }
 
+  // Sets employee's assigned task to complete
+  public void completeTask(ActionEvent actionEvent) {
+    initializeDB();
+    try {
+      Employee selectedEmployee = employeesTable.getSelectionModel()
+          .getSelectedItem();
+      // Doesn't let method continue if user hasn't selected employee
+      if(selectedEmployee == null){
+        return;
+      }
+      int selectedEmployeeID = selectedEmployee.getEmployeeNum();
+      String preparedStm = "UPDATE EMPLOYEE SET ASSIGNED_TASK = 'Complete' WHERE EMPLOYEE_NUM = ?;";
+      PreparedStatement preparedStatement = conn.prepareStatement(preparedStm);
+      preparedStatement.setInt(1, selectedEmployeeID);
+      preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    closeDb();
+  }
+
+  // Updates employee's assigned task to the new one
+  public void assignTask(ActionEvent actionEvent) {
+    initializeDB();
+    try {
+      Employee selectedEmployee = employeesTable.getSelectionModel()
+          .getSelectedItem();
+      // Doesn't let method continue if user hasn't selected employee
+      if(selectedEmployee == null){
+        return;
+      }
+      int selectedEmployeeID = selectedEmployee.getEmployeeNum();
+      String newTask = newTaskField.getText();
+      String preparedStm = "UPDATE EMPLOYEE SET ASSIGNED_TASK = ? WHERE EMPLOYEE_NUM = ?;";
+      PreparedStatement preparedStatement = conn.prepareStatement(preparedStm);
+      preparedStatement.setString(1, newTask);
+      preparedStatement.setInt(2, selectedEmployeeID);
+      preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    closeDb();
+  }
+
   public void removeFromEmployeesTable(ActionEvent actionEvent) {
     initializeDB();
     try {
@@ -1012,10 +1059,10 @@ public class Controller {
     }
   }
 
-    @FXML
-    public void closeAnimalProfile () {
-      Stage stage = (Stage) closeAnimalProfileBtn.getScene().getWindow();
-      stage.close();
-    }
+  @FXML
+  public void closeAnimalProfile() {
+    Stage stage = (Stage) closeAnimalProfileBtn.getScene().getWindow();
+    stage.close();
+  }
 }
 

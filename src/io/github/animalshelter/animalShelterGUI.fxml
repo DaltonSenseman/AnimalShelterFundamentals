@@ -199,7 +199,7 @@
                 <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 </rowConstraints>
-                <Button id="mainGuiButtons" mnemonicParsing="false" onAction="#openAddEmployeeDialog" prefWidth="105.0" text="Add" GridPane.halignment="RIGHT">
+                <Button id="mainGuiButtons" mnemonicParsing="false" onAction="#openAddEmployeeDialog" prefWidth="105.0" text="Add" GridPane.columnIndex="3"> <!--GridPane.halignment="RIGHT">-->
                   <GridPane.margin>
                     <Insets right="20.0" />
                   </GridPane.margin>
@@ -207,7 +207,7 @@
                     <Font size="24.0" />
                   </font>
                 </Button>
-                <Button id="mainGuiButtons" mnemonicParsing="false" onAction="#removeFromEmployeesTable" text="Remove" GridPane.columnIndex="1">
+                <Button id="mainGuiButtons" mnemonicParsing="false" onAction="#removeFromEmployeesTable" text="Remove" GridPane.columnIndex="4">
                   <GridPane.margin>
                     <Insets left="20.0" />
                   </GridPane.margin>
@@ -215,6 +215,23 @@
                     <Font size="24.0" />
                   </font>
                 </Button>
+                <Button id="mainGuiButtons" mnemonicParsing="false" onAction="#completeTask" text="Complete Task" GridPane.columnIndex="2">
+                  <GridPane.margin>
+                    <Insets left="20.0" />
+                  </GridPane.margin>
+                  <font>
+                    <Font size="24.0" />
+                  </font>
+                </Button>
+                <Button id="mainGuiButtons" mnemonicParsing="false" onAction="#assignTask" text="Assign Task" GridPane.columnIndex="1">
+                  <GridPane.margin>
+                    <Insets left="20.0" />
+                  </GridPane.margin>
+                  <font>
+                    <Font size="24.0" />
+                  </font>
+                </Button>
+                <TextField fx:id="newTaskField" prefWidth="0" GridPane.columnIndex="0"/>
               </GridPane>
             </GridPane>
           </Tab>
