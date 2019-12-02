@@ -54,6 +54,9 @@ public class Controller {
   private PasswordField loginPassField;
 
   @FXML
+  private Button addEmpPageBtn;
+
+  @FXML
   private Label loginFailedLabel;
   //</editor-fold>
 
@@ -251,7 +254,6 @@ public class Controller {
   @FXML
   private Button saveAnimalProfile;
 
-
   private boolean hasBeenInitialized = false;
 
   private Animal selectedAnimal;
@@ -327,6 +329,7 @@ public class Controller {
     jobTitle.getItems().addAll("Vet Tech", "Veterinarian", "Manager", "Janitor", "Accountant");
     setupEmployeesTable();
     populateEmployeesTable();
+
     hasBeenInitialized = true;
   }
 
@@ -366,15 +369,55 @@ public class Controller {
   private void onSubmitButtonClicked(ActionEvent event) throws Exception {
     Stage stage = (Stage) loginSubmitButton.getScene().getWindow();
     Parent main = FXMLLoader.load(getClass().getResource("animalshelterGUI.fxml"));
+    Parent main2 = FXMLLoader.load(getClass().getResource("animalshelterGUI2.fxml"));
 
-    // Check username and password field in order to login
-    if (loginUserField.getText().equals("username") && loginPassField.getText()
-        .equals("password")) {
-      stage.setScene(new Scene(main));
+    initializeDB();
+    Boolean isValid = false;
+    Boolean isManager = false;
+    String testName = loginUserField.getText();
+    String testPass = loginPassField.getText();
+
+    try {
+      PreparedStatement prep = conn
+          .prepareStatement("SELECT USERNAME, PASSWORD, JOB_CLASS FROM EMPLOYEE");
+      ResultSet resultSet = prep.executeQuery();
+
+      while (resultSet.next()) {
+        String userName = resultSet.getString("USERNAME");
+        String passWord = resultSet.getString("PASSWORD");
+        String jobClass = resultSet.getString("JOB_CLASS");
+
+        if ((testName.equals(userName)) && (testPass.equals(passWord))) {
+          isValid = true;
+          if (jobClass.equals("Manager")) {
+            isManager = true;
+          }
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      closeDb();
+    }
+
+    if (isValid && isManager) {
+      stage.setScene(new Scene(main)); // Goes to FULL FXML version will all features
+      stage.show();
+    } else if (isValid) {
+      stage.setScene(new Scene(main2)); //Goes to FXML version with no ADD/Delete employee buttons
       stage.show();
     } else {
       loginFailedLabel.setText("Login failed!"); // If username or password do not match
     }
+
+//    // Check username and password field in order to login
+//    if (loginUserField.getText().equals("username") && loginPassField.getText()
+//        .equals("password")) {
+//      stage.setScene(new Scene(main));
+//      stage.show();
+//    } else {
+//      loginFailedLabel.setText("Login failed!"); // If username or password do not match
+//    }
   }
 
   /**
@@ -883,7 +926,7 @@ public class Controller {
       Employee selectedEmployee = employeesTable.getSelectionModel()
           .getSelectedItem();
       // Doesn't let method continue if user hasn't selected employee
-      if(selectedEmployee == null){
+      if (selectedEmployee == null) {
         return;
       }
       int selectedEmployeeID = selectedEmployee.getEmployeeNum();
@@ -905,7 +948,7 @@ public class Controller {
       Employee selectedEmployee = employeesTable.getSelectionModel()
           .getSelectedItem();
       // Doesn't let method continue if user hasn't selected employee
-      if(selectedEmployee == null){
+      if (selectedEmployee == null) {
         return;
       }
       int selectedEmployeeID = selectedEmployee.getEmployeeNum();
