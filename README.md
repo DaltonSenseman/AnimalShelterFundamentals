@@ -10,13 +10,13 @@ Link to Presentation: https://bit.ly/35OTYbV
 ![UML](https://user-images.githubusercontent.com/43663619/67156074-14fd7480-f2e8-11e9-913a-39d9984ad443.PNG)
 
 ### Features
--Login page
--Administrative access
--Adding/removing from DB
--Animal information displayed
--Editing animal information
--Search function
--Creating events for animals
+- Login page
+- Administrative access
+- Adding/removing from DB
+- Animal information displayed
+- Editing animal information
+- Search function
+- Creating events for animals
 
 
 ### Built With
