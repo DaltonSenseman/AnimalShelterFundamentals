@@ -2,6 +2,11 @@
 
  The  software will have two possible accounts, an employee account and an administrator account. The employee account will be able to add/remove animals from the shelter’s database. Each animal added to the database will have a profile that holds their animal type, breed, vaccines and check-ups, name, and age. An employee will be able to modify the information contained in these profiles. A specific animal in the database can be found by searching their animal ID. The program will allow the employees to see where animals are located in the facility and place them in certain holding areas and cages. The user will also be allowed to order supplies for specific animals and schedule vet visits and cleanings. An administrator account will inherit all of the employee accounts rights plus the ability to add employees, schedule tasks, and change employee information and permissions in the program. 
 
+### How to run
+After the code is loaded into the IDE if it does not run right away check the project dependencies. Do this by clicking on:
+- File-> project structure-> modules-> dependencies
+- If the h2 jar file is missing added it by clicking on the "plus" sign on the right and navigate to the jar file which is located in the res folder. 
+
 ### Demonstration
 Link to Presentation: https://bit.ly/35OTYbV
 
