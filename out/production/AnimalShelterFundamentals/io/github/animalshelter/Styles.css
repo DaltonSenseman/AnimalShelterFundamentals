@@ -105,7 +105,7 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 5, 0, 0, 0);
 }
 
-#mainGuiButtons{
+#addEmpPageBtn{
     -fx-background-color: linear-gradient(#FFC107,  #ff8080);
     -fx-font: bold 20px "Ariel Black";
     -fx-text-fill:  #f2f2f2;

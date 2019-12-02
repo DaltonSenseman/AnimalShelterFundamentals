@@ -188,7 +188,7 @@
                 <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 </rowConstraints>
-                <Button fx:id="addEmpPageBtn" mnemonicParsing="false" onAction="#openAddEmployeeDialog" prefWidth="202.0" text="Add Employee" translateX="15.0" translateY="35.0" GridPane.columnIndex="2"> <!--GridPane.halignment="RIGHT">-->
+                <Button fx:id="addEmpPageBtn" visible="false" mnemonicParsing="false" onAction="#openAddEmployeeDialog" prefWidth="202.0" text="Add Employee" translateX="15.0" translateY="35.0" GridPane.columnIndex="2"> <!--GridPane.halignment="RIGHT">-->
                   <GridPane.margin>
                     <Insets right="20.0" />
                   </GridPane.margin>
@@ -196,7 +196,7 @@
                     <Font size="24.0" />
                   </font>
                 </Button>
-                <Button id="mainGuiButtons" mnemonicParsing="false" onAction="#removeFromEmployeesTable" text="Remove Employee" translateX="-5.0" translateY="35.0" GridPane.columnIndex="3">
+                <Button id="mainGuiButtons" visible="false" mnemonicParsing="false" onAction="#removeFromEmployeesTable" text="Remove Employee" translateX="-5.0" translateY="35.0" GridPane.columnIndex="3">
                   <GridPane.margin>
                     <Insets left="20.0" />
                   </GridPane.margin>
