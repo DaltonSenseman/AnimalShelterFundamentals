@@ -36,6 +36,14 @@ Link to Presentation: https://bit.ly/35OTYbV
 - Java 1.8 or higher
 - H2 Jar file need to run the program.
 
+## Project Video Links
+
+Video One:
+https://www.youtube.com/watch?v=9Ai9w4gNUSA
+
+Video Two:
+https://www.youtube.com/watch?v=fLBEvzM58kc
+
 ### History
 Version: 1.0 
 Date: 9/6 
