@@ -66,7 +66,7 @@
        <TextField id="animalDescriptions" fx:id="editAnimalBreed" alignment="CENTER" minHeight="20.0" minWidth="120.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
        <TextField id="animalDescriptions" fx:id="editAnimalWeight" alignment="CENTER" minHeight="20.0" minWidth="120.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
        <TextField id="animalDescriptions" fx:id="editAnimalGender" alignment="CENTER" minHeight="20.0" minWidth="120.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-       <Button id="mainGuiButtons" fx:id="saveAnimalProfile" alignment="CENTER" mnemonicParsing="false" onAction="#saveAnimalEdit" prefHeight="44.0" prefWidth="92.0" text="Save" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+       <Button id="addEmployee" fx:id="saveAnimalProfile" alignment="CENTER" mnemonicParsing="false" onAction="#saveAnimalEdit" prefHeight="44.0" prefWidth="92.0" text="Save" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
          <font>
            <Font size="14.0" />
          </font>

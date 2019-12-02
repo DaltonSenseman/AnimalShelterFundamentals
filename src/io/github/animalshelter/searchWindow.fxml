@@ -54,7 +54,7 @@
       </GridPane.margin>
     </ComboBox>
     <TextField fx:id="searchField" maxHeight="30.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-    <Button id="mainGuiButtons" mnemonicParsing="false" onAction="#search" prefHeight="35.0" prefWidth="100.0" text="Search" translateX="20.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
+    <Button id="addEmployee" mnemonicParsing="false" onAction="#search" prefHeight="35.0" prefWidth="100.0" text="Search" translateX="20.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
       <font>
         <Font size="18.0" />
       </font>

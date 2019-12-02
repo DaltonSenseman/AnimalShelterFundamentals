@@ -86,7 +86,7 @@
            <Insets right="10.0" />
          </GridPane.margin>
        </Label>
-       <TextField fx:id="employeeFirstName" alignment="CENTER" maxWidth="150.0" translateX="50.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+       <TextField fx:id="employeeFirstName" maxWidth="150.0" translateX="50.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
        <TextField fx:id="employeeLastName" maxWidth="150.0" translateX="50.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
        <TextField fx:id="employeeAssignedTask" maxWidth="150.0" translateX="50.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
        <ComboBox id="animalCombo" fx:id="jobTitle" prefWidth="150.0" translateX="50.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
